@@ -38,7 +38,7 @@ Agrega encabezados de caché:
 Cache-Control: public, max-age=31536000, immutable
 ```
 
-Esto asegura que el navegador y el CDN mantengan el archivo por un año sin necesidad de validarlo nuevamente.
+Esto permite que el navegador y el CDN cacheen el archivo por 1 año sin necesidad de volver a descargarlo mientras el nombre no cambie.
 
 ---
 
