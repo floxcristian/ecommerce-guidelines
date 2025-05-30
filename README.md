@@ -67,6 +67,15 @@ Este archivo debe actualizarse automáticamente desde el CMS cuando se sube un n
 
 Esto asegura que todos los componentes puedan acceder a los íconos sin redundancia.
 
+### ¿Por qué hacerlo desde AppComponent?
+
+| Razón                                      | Beneficio                     |
+|--------------------------------------------|-------------------------------|
+| Los íconos se usan en toda la app          | ✅ Se evita duplicar lógica   |
+| El servicio queda disponible globalmente   | ✅ Mejora consistencia        |
+| No afecta el render inicial (FCP)          | ✅ Optimización Lighthouse    |
+
+
 ---
 
 ### 5. 🧩 Ejemplo completo en Angular
