@@ -75,7 +75,6 @@ Esto asegura que todos los componentes puedan acceder a los íconos sin redundan
 | El servicio queda disponible globalmente   | ✅ Mejora consistencia        |
 | No afecta el render inicial (FCP)          | ✅ Optimización Lighthouse    |
 
-
 ---
 
 ### 5. 🧩 Ejemplo completo en Angular
@@ -221,12 +220,66 @@ getIconUrl(tags: string[]): string | null {
 
 ---
 
+## 🧩 Si usas NestJS + MongoDB
+
+### ✅ Estrategia recomendada para máxima velocidad y escalabilidad
+
+1. **Guarda el JSON en MongoDB** como documento estático:
+```json
+{
+  "_id": "icon_versions",
+  "icons": {
+    "no-es-cyber": "https://cdn.yoursite.com/icons/no-es-cyber.20250530.png",
+    "exclusive": "https://cdn.yoursite.com/icons/exclusive.20240518.svg"
+  }
+}
+```
+
+2. **NestJS Service** con caché en memoria:
+```ts
+@Injectable()
+export class IconService {
+  constructor(@InjectModel('IconMapping') private iconModel: Model<any>) {}
+
+  private cache: { icons: Record<string, string>, timestamp: number } = null;
+
+  async getIconMap(): Promise<Record<string, string>> {
+    const now = Date.now();
+    if (this.cache && now - this.cache.timestamp < 300_000) {
+      return this.cache.icons;
+    }
+    const doc = await this.iconModel.findById('icon_versions').lean();
+    this.cache = { icons: doc?.icons || {}, timestamp: now };
+    return this.cache.icons;
+  }
+}
+```
+
+3. **Controlador optimizado para cache HTTP:**
+
+```ts
+@Controller('api/icons')
+export class IconController {
+  constructor(private readonly iconService: IconService) {}
+
+  @Get()
+  @Header('Cache-Control', 'public, max-age=300, stale-while-revalidate=600')
+  async getIcons(): Promise<Record<string, string>> {
+    return await this.iconService.getIconMap();
+  }
+}
+```
+
+✅ Esto permite respuesta rápida desde Mongo o memoria, manteniendo los íconos actualizados automáticamente desde el CMS.
+
+---
+
 ## ✅ Resultado esperado
 
 | Métrica                    | Resultado     |
 |----------------------------|----------------|
 | Lighthouse (Performance)   | ✅ 100/100      |
 | UX Visual                  | ✅ Rápida y consistente |
-| Carga sin recompilar       | ✅ Desde CMS     |
-| Cacheo largo y efectivo    | ✅ CDN + navegador |
-| Escalabilidad              | ✅ Uso global en toda la app |
+| Carga sin recompilar       | ✅ Desde CMS o MongoDB |
+| Cacheo largo y efectivo    | ✅ CDN + navegador + memory |
+| Escalabilidad              | ✅ A toda la app y múltiples entornos |
