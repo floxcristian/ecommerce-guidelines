@@ -1,285 +1,58 @@
-# ✅ Guía completa: Manejo de íconos dinámicos con CMS, Angular y CDN  
-### 🔝 Alto rendimiento, caché optimizada, y puntuación Lighthouse 100
+# 📚 Guías Técnicas para E-commerce
 
-## 🎯 Objetivo
+Colección completa de guías técnicas para desarrollo de aplicaciones e-commerce de alto rendimiento con Angular, NX y optimización para Lighthouse 100/100.
 
-Implementar un sistema donde:
+## 📋 Índice de Contenidos
 
-- Los íconos se sirvan desde un CDN (ej. Cloudflare)
-- El CMS controle las versiones dinámicamente mediante un JSON
-- Angular consuma estos íconos sin necesidad de recompilar
-- Se aproveche al máximo la caché (`immutable`, nombres versionados)
-- Se logre una experiencia visual rápida, consistente y profesional
-- Se obtenga el **puntaje más alto posible en Lighthouse**
+### 🎨 Sistema de Iconos
 
----
+- [**Guía Principal: Sistema de Iconos SVG**](./icons/README.md) - Estrategia completa de iconos con sprites y CDN
+- [**Implementación de Iconos Críticos**](./icons/critical-icons.md) - Above-the-fold vs Below-the-fold
+- [**Automatización CDN**](./icons/cdn-automation.md) - Deploy automático y CI/CD
+- [**Iconos Dinámicos con CMS**](./icons/dynamic-icons-cms.md) - Sistema híbrido CMS + Angular
 
-## 🧩 Implementación paso a paso (con ejemplos en inglés)
+### ⚡ Rendimiento y Core Web Vitals
 
-### 1. Usar nombres de archivo versionados
+- [**Optimización Lighthouse 100/100**](./performance/lighthouse-optimization.md) - Métricas y estrategias
+- [**Monitoreo y Analytics**](./performance/monitoring.md) - RUM y herramientas de medición
 
-```bash
-/icons/no-es-cyber.20250530.png
-```
+### 🛠️ Herramientas de Desarrollo
 
-Evita usar rutas fijas sin versión, como:
+- [**Scripts y Automatización**](./tools/scripts.md) - Comandos NX y scripts de build
+- [**Testing de Performance**](./tools/testing.md) - Tests E2E y visuales
 
-```bash
-/icons/no-es-cyber.png  # ❌ esto mantiene caché obsoleta
-```
+### 📖 Best Practices
 
----
+- [**Arquitectura NX**](./architecture/nx-structure.md) - Organización de libs y apps
+- [**Angular SSR**](./architecture/ssr-optimization.md) - Server-Side Rendering
+- [**Deployment y CI/CD**](./architecture/deployment.md) - Pipelines de deploy y automatización
 
-### 2. Subir los íconos a un CDN (ej. Cloudflare)
+## 🚀 Quick Start
 
-Agrega encabezados de caché:
+1. **Para implementar sistema de iconos**: Comienza con [Sistema de Iconos SVG](./icons/README.md)
+2. **Para optimizar rendimiento**: Ve a [Optimización Lighthouse](./performance/lighthouse-optimization.md)
+3. **Para configurar herramientas**: Revisa [Scripts y Automatización](./tools/scripts.md)
 
-```http
-Cache-Control: public, max-age=31536000, immutable
-```
+## 🎯 Objetivos de estas guías
 
-Esto permite que el navegador y el CDN cacheen el archivo por 1 año sin necesidad de volver a descargarlo mientras el nombre no cambie.
+- ✅ Lighthouse 100/100 consistente
+- ⚡ FCP < 1s, LCP < 2.5s
+- 🎨 Sistema de iconos escalable
+- 📱 UX optimizada para e-commerce
+- 🔧 Automatización completa de CI/CD
 
----
+## 📊 Métricas Objetivo
 
-### 3. Exponer un API JSON desde el CMS
-
-Ejemplo de endpoint:
-
-```http
-GET https://cms-api.yoursite.com/api/icons
-```
-
-Respuesta:
-
-```json
-{
-  "no-es-cyber": "https://cdn.yoursite.com/icons/no-es-cyber.20250530.png",
-  "exclusive": "https://cdn.yoursite.com/icons/exclusive.20240518.svg"
-}
-```
-
-Este archivo debe actualizarse automáticamente desde el CMS cuando se sube un nuevo ícono.
+| Métrica         | Target  | Critical |
+| --------------- | ------- | -------- |
+| **Performance** | 100/100 | 95+      |
+| **FCP**         | < 1.0s  | < 1.5s   |
+| **LCP**         | < 2.5s  | < 4.0s   |
+| **CLS**         | < 0.1   | < 0.25   |
+| **TTI**         | < 3.0s  | < 5.0s   |
 
 ---
 
-### 4. ✅ Cargar el JSON desde `AppComponent` (carga global recomendada)
-
-Esto asegura que todos los componentes puedan acceder a los íconos sin redundancia.
-
-### ¿Por qué hacerlo desde AppComponent?
-
-| Razón                                      | Beneficio                     |
-|--------------------------------------------|-------------------------------|
-| Los íconos se usan en toda la app          | ✅ Se evita duplicar lógica   |
-| El servicio queda disponible globalmente   | ✅ Mejora consistencia        |
-| No afecta el render inicial (FCP)          | ✅ Optimización Lighthouse    |
-
----
-
-### 5. 🧩 Ejemplo completo en Angular
-
-#### icon.service.ts
-
-```ts
-@Injectable({ providedIn: 'root' })
-export class IconService {
-  private icons: Record<string, string> = {};
-  private loaded = false;
-
-  constructor(private http: HttpClient) {}
-
-  load(): Observable<void> {
-    if (this.loaded) return of(undefined);
-    return this.http.get<Record<string, string>>('https://cms-api.yoursite.com/api/icons').pipe(
-      tap(data => {
-        this.icons = data;
-        this.loaded = true;
-      }),
-      map(() => void 0)
-    );
-  }
-
-  getIcon(tag: string): string | null {
-    return this.icons[tag] || null;
-  }
-}
-```
-
-#### app.component.ts
-
-```ts
-export class AppComponent implements OnInit {
-  constructor(private iconService: IconService) {}
-
-  ngOnInit(): void {
-    this.iconService.load().subscribe();
-  }
-}
-```
-
-#### Uso en cualquier componente
-
-```ts
-getIconUrl(tags: string[]): string | null {
-  for (const tag of tags) {
-    const url = this.iconService.getIcon(tag);
-    if (url) return url;
-  }
-  return null;
-}
-```
-
-```html
-<img *ngIf="getIconUrl(product.metatags)"
-     [src]="getIconUrl(product.metatags)"
-     [alt]="product.name + ' badge'"
-     width="20"
-     height="20"
-     loading="lazy">
-```
-
----
-
-## 🔧 Recomendaciones avanzadas para rendimiento y puntaje Lighthouse 100
-
-### 📦 Optimización de carga y formatos
-
-#### ✅ Formatos modernos (`WebP`, `AVIF`)
-
-```html
-<picture>
-  <source srcset="/icons/no-es-cyber.20250530.avif" type="image/avif">
-  <source srcset="/icons/no-es-cyber.20250530.webp" type="image/webp">
-  <img src="/icons/no-es-cyber.20250530.png" alt="No es Cyber" loading="lazy">
-</picture>
-```
-
-#### ✅ Preload de íconos críticos
-
-```html
-<link rel="preload" as="image" href="/icons/star.20250530.svg" />
-```
-
-#### ✅ Tamaños apropiados
-
-```html
-<img src="/icons/exclusive.20250530.svg" width="20" height="20" />
-```
-
-#### ✅ Lazy loading en <img>
-
-```html
-<img loading="lazy" src="/icons/exclusive.20250530.png" />
-```
-
-#### ✅ Evitar CLS (layout shift)
-
-```css
-.icon-container {
-  width: 20px;
-  height: 20px;
-  display: inline-block;
-}
-```
-
-#### ✅ Sprite SVG (opcional)
-
-```html
-<svg class="icon">
-  <use xlink:href="/sprite.svg#icon-star"></use>
-</svg>
-```
-
----
-
-### ⚙️ Configuración y caché
-
-- Usar:  
-  ```http
-  Cache-Control: public, max-age=31536000, immutable
-  ```
-
-- ❌ Evitar:
-  ```js
-  ?v=Date.now()
-  ```
-
-- ✅ Usar nombres versionados:
-  ```
-  /icons/icon.20250530.png
-  ```
-
----
-
-### 📊 Medición y auditoría
-
-- [ ] Google Search Console + Core Web Vitals
-- [ ] Chrome DevTools → Coverage
-- [ ] Implementar `web-vitals` en producción
-
----
-
-## 🧩 Si usas NestJS + MongoDB
-
-### ✅ Estrategia recomendada para máxima velocidad y escalabilidad
-
-1. **Guarda el JSON en MongoDB** como documento estático:
-```json
-{
-  "_id": "icon_versions",
-  "icons": {
-    "no-es-cyber": "https://cdn.yoursite.com/icons/no-es-cyber.20250530.png",
-    "exclusive": "https://cdn.yoursite.com/icons/exclusive.20240518.svg"
-  }
-}
-```
-
-2. **NestJS Service** con caché en memoria:
-```ts
-@Injectable()
-export class IconService {
-  constructor(@InjectModel('IconMapping') private iconModel: Model<any>) {}
-
-  private cache: { icons: Record<string, string>, timestamp: number } = null;
-
-  async getIconMap(): Promise<Record<string, string>> {
-    const now = Date.now();
-    if (this.cache && now - this.cache.timestamp < 300_000) {
-      return this.cache.icons;
-    }
-    const doc = await this.iconModel.findById('icon_versions').lean();
-    this.cache = { icons: doc?.icons || {}, timestamp: now };
-    return this.cache.icons;
-  }
-}
-```
-
-3. **Controlador optimizado para cache HTTP:**
-
-```ts
-@Controller('api/icons')
-export class IconController {
-  constructor(private readonly iconService: IconService) {}
-
-  @Get()
-  @Header('Cache-Control', 'public, max-age=300, stale-while-revalidate=600')
-  async getIcons(): Promise<Record<string, string>> {
-    return await this.iconService.getIconMap();
-  }
-}
-```
-
-✅ Esto permite respuesta rápida desde Mongo o memoria, manteniendo los íconos actualizados automáticamente desde el CMS.
-
----
-
-## ✅ Resultado esperado
-
-| Métrica                    | Resultado     |
-|----------------------------|----------------|
-| Lighthouse (Performance)   | ✅ 100/100      |
-| UX Visual                  | ✅ Rápida y consistente |
-| Carga sin recompilar       | ✅ Desde CMS o MongoDB |
-| Cacheo largo y efectivo    | ✅ CDN + navegador + memory |
-| Escalabilidad              | ✅ A toda la app y múltiples entornos |
+**Última actualización**: Diciembre 2024  
+**Mantenido por**: Equipo de Frontend  
+**Versión**: 3.0.0
