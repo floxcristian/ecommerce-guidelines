@@ -9,18 +9,22 @@ Sistema escalable de iconos SVG optimizado para rendimiento máximo (Lighthouse 
 El concepto de "fold" es crucial para el rendimiento. Todo lo que el usuario ve sin hacer scroll debe cargarse instantáneamente, mientras que el contenido inferior puede cargarse de forma optimizada.
 
 ```mermaid
-graph TB
+graph TD
     subgraph "📱 Viewport del Navegador"
-        subgraph "🔍 ABOVE THE FOLD"
-            A1["🏠 Logo + 🔍 Search + 🛒 Cart"]
-            A2["OFERTA BLACK FRIDAY"]
-            A3["🛍️ COMPRAR AHORA"]
-            A4["⭐ Productos destacados"]
+        direction TB
+
+        subgraph "🔍 ABOVE THE FOLD - Visible sin scroll"
+            A1["🏠 Logo"]
+            A2["🔍 Search"]
+            A3["🛒 Cart"]
+            A4["OFERTA BLACK FRIDAY"]
+            A5["🛍️ COMPRAR AHORA"]
+            A6["⭐ Productos destacados"]
         end
 
-        A5[📏 El 'fold' - límite de pantalla]
+        FOLD[" ═══════════════════════════════<br/>📏 EL FOLD - límite de pantalla<br/>═══════════════════════════════ "]
 
-        subgraph "👇 BELOW THE FOLD"
+        subgraph "👇 BELOW THE FOLD - Requiere scroll"
             B1["📦 Información de envío"]
             B2["🛡️ Garantías y políticas"]
             B3["🌟 Reviews de clientes"]
@@ -28,18 +32,19 @@ graph TB
         end
     end
 
-    A1 -.-> C1["✅ ICONOS INLINE<br/>Renderizado instantáneo"]
-    A2 -.-> C1
-    A3 -.-> C1
+    A1 --> C1["✅ ICONOS INLINE<br/>Renderizado instantáneo"]
+    A2 --> C1
+    A3 --> C1
+    A5 --> C1
 
-    B1 -.-> C2["🌐 SPRITES CDN<br/>Carga optimizada"]
-    B2 -.-> C2
-    B3 -.-> C2
-    B4 -.-> C2
+    B1 --> C2["🌐 SPRITES CDN<br/>Carga optimizada"]
+    B2 --> C2
+    B3 --> C2
+    B4 --> C2
 
     style C1 fill:#4caf50,color:#fff
     style C2 fill:#2196f3,color:#fff
-    style A5 fill:#ff9800,color:#fff
+    style FOLD fill:#ff9800,color:#fff
 ```
 
 **¿Por qué esta separación?**
