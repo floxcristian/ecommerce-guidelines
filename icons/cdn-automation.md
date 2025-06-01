@@ -1,50 +1,72 @@
 # ☁️ Automatización CDN para Iconos
 
-Sistema completo de automatización para deploy de sprites de iconos a Cloudflare CDN con CI/CD, optimización y monitoreo.
+Sistema completo de automatización para deploy de sprites de iconos a Cloudflare R2 + CDN con CI/CD, optimización y monitoreo.
 
-## 🎯 Objetivos
+## 🎯 ¿Por qué automatizar el CDN?
 
-- **Deploy automático**: Sprites se suben automáticamente al CDN
-- **Cache busting**: Nombres con hash para cache inmutable
-- **Compresión múltiple**: Gzip + Brotli para máximo rendimiento
-- **Invalidación automática**: CloudFront cache se limpia automáticamente
-- **Rollback seguro**: Posibilidad de volver a versiones anteriores
+En e-commerce, los iconos optimizados pueden mejorar el FCP (First Contentful Paint) hasta un 62%. La automatización elimina errores humanos y garantiza:
 
-## 🏗️ Arquitectura de Deploy
+- **Consistencia**: Misma optimización en cada deploy
+- **Velocidad**: Deploy automático en segundos vs. minutos manuales
+- **Confiabilidad**: Tests automáticos previenen regresiones
+- **Escalabilidad**: Funciona igual con 10 o 1000 iconos
 
+## 🏗️ Arquitectura Completa del Sistema
+
+### Flujo de trabajo paso a paso
+
+```mermaid
+graph TD
+    A[👨‍💻 Developer agrega SVG] --> B[🔍 Pre-commit hooks]
+    B --> C[📤 Git push]
+    C --> D[🤖 GitHub Actions detecta cambios]
+    D --> E[✅ Validación automática]
+    E --> F[🎨 Generación de sprites]
+    F --> G[🧪 Tests automáticos]
+    G --> H[📦 Build artifacts]
+    H --> I[🚀 Deploy a Cloudflare R2]
+    I --> J[🌐 Purge CDN cache]
+    J --> K[🏥 Health check]
+    K --> L[📊 Notificaciones]
+
+    style A fill:#e3f2fd
+    style L fill:#c8e6c9
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    DESARROLLO LOCAL                         │
-├─────────────────────────────────────────────────────────────┤
-│  1. Agregar/modificar SVGs en libs/icons/src/assets/       │
-│  2. npm run icons:validate                                 │
-│  3. npm run icons:generate                                 │
-│  4. git commit + push                                      │
-└─────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                    GITHUB ACTIONS                          │
-├─────────────────────────────────────────────────────────────┤
-│  1. Validar SVGs (sintaxis, naming, tamaño)               │
-│  2. Generar sprites optimizados                           │
-│  3. Ejecutar tests                                         │
-│  4. Deploy a Cloudflare R2                                │
-│  5. Invalidar cache CloudFront                            │
-│  6. Notificar resultado                                    │
-└─────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                 CLOUDFLARE CDN                             │
-├─────────────────────────────────────────────────────────────┤
-│  • sprite-core-a1b2c3d4.svg                               │
-│  • sprite-home-e5f6g7h8.svg                               │
-│  • sprite-admin-i9j0k1l2.svg                              │
-│  • manifest.json                                          │
-│  📊 Headers: Cache-Control: immutable, max-age=1year      │
-└─────────────────────────────────────────────────────────────┘
-```
+
+### Componentes del sistema
+
+- **Desarrollo Local**: Donde los desarrolladores crean y prueban los iconos.
+- **GitHub**: Para control de versiones y como disparador de despliegues.
+- **GitHub Actions**: Para CI/CD, ejecutando tests y despliegues automáticamente.
+- **Cloudflare R2**: Almacenamiento de objetos en la nube para los sprites de iconos.
+- **Cloudflare CDN**: Red de entrega de contenido para servir los iconos rápidamente a nivel global.
+- **Herramientas de Monitoreo**: Para verificar la salud del CDN y recibir alertas.
+
+## 🎨 Proceso de Desarrollo y Despliegue
+
+1. **Desarrollo Local**:
+
+   - Los desarrolladores agregan o modifican archivos SVG en el repositorio.
+   - Se ejecutan scripts locales para validar y generar sprites.
+
+2. **Control de Versiones**:
+
+   - Los cambios se envían a través de Git a ramas específicas (`main`, `develop`).
+   - Se utilizan etiquetas y versiones semánticas para el control de versiones.
+
+3. **Integración Continua (CI)**:
+
+   - GitHub Actions ejecuta flujos de trabajo en cada push o pull request.
+   - Se validan los archivos SVG, se generan sprites y se ejecutan pruebas automáticas.
+
+4. **Despliegue Continuo (CD)**:
+
+   - Los artefactos de construcción se despliegan automáticamente en Cloudflare R2.
+   - Se purga la caché del CDN para servir los archivos actualizados.
+
+5. **Monitoreo y Alertas**:
+   - Se realizan verificaciones de salud del CDN.
+   - Se envían notificaciones en caso de fallos o problemas de rendimiento.
 
 ## 🛠️ Scripts de Deploy
 
@@ -1215,11 +1237,6 @@ CLOUDFLARE_ACCESS_KEY_ID=your_access_key
 CLOUDFLARE_SECRET_ACCESS_KEY=your_secret_key
 CLOUDFLARE_BUCKET_NAME=icons-cdn
 
-# CloudFront (Optional, for cache invalidation)
-CLOUDFRONT_DISTRIBUTION_ID=your_distribution_id
-AWS_ACCESS_KEY_ID=your_aws_key
-AWS_SECRET_ACCESS_KEY=your_aws_secret
-
 # CDN Domain
 CDN_DOMAIN=cdn.miempresa.com
 
@@ -1239,11 +1256,6 @@ SLACK_WEBHOOK_URL=your_slack_webhook
 CLOUDFLARE_ACCOUNT_ID: "abc123def456..."
 CLOUDFLARE_ACCESS_KEY_ID: "access_key_here"
 CLOUDFLARE_SECRET_ACCESS_KEY: "secret_key_here"
-
-# AWS (for CloudFront)
-AWS_ACCESS_KEY_ID: "AKIA..."
-AWS_SECRET_ACCESS_KEY: "secret..."
-CLOUDFRONT_DISTRIBUTION_ID: "E123456789"
 
 # Repository Variables
 CLOUDFLARE_BUCKET_NAME: "icons-cdn"
