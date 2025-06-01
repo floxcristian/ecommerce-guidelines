@@ -6,7 +6,7 @@ Sistema híbrido que combina iconos críticos inline con iconos dinámicos servi
 
 Implementar un sistema donde:
 
-- Los íconos se sirvan desde un CDN (ej. Cloudflare)
+- Los íconos se sirvan desde un CDN de Cloudflare. 
 - El CMS controle las versiones dinámicamente mediante un JSON
 - Angular consuma estos íconos sin necesidad de recompilar
 - Se aproveche al máximo la caché (`immutable`, nombres versionados)
