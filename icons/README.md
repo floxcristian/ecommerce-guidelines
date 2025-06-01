@@ -6,21 +6,46 @@ Sistema escalable de iconos SVG optimizado para rendimiento máximo (Lighthouse 
 
 ### Above-the-fold vs Below-the-fold
 
+El concepto de "fold" es crucial para el rendimiento. Todo lo que el usuario ve sin hacer scroll debe cargarse instantáneamente, mientras que el contenido inferior puede cargarse de forma optimizada.
+
+```mermaid
+graph TB
+    subgraph "📱 Viewport del Navegador"
+        subgraph "🔍 ABOVE THE FOLD"
+            A1["🏠 Logo + 🔍 Search + 🛒 Cart"]
+            A2["OFERTA BLACK FRIDAY"]
+            A3["🛍️ COMPRAR AHORA"]
+            A4["⭐ Productos destacados"]
+        end
+
+        A5[📏 El 'fold' - límite de pantalla]
+
+        subgraph "👇 BELOW THE FOLD"
+            B1["📦 Información de envío"]
+            B2["🛡️ Garantías y políticas"]
+            B3["🌟 Reviews de clientes"]
+            B4["📞 Información de contacto"]
+        end
+    end
+
+    A1 -.-> C1["✅ ICONOS INLINE<br/>Renderizado instantáneo"]
+    A2 -.-> C1
+    A3 -.-> C1
+
+    B1 -.-> C2["🌐 SPRITES CDN<br/>Carga optimizada"]
+    B2 -.-> C2
+    B3 -.-> C2
+    B4 -.-> C2
+
+    style C1 fill:#4caf50,color:#fff
+    style C2 fill:#2196f3,color:#fff
+    style A5 fill:#ff9800,color:#fff
 ```
-┌───────────────────────────────────┐ ◄── Viewport del navegador
-│  🏠 Logo    🔍 Search   🛒 Cart  │ ◄── ABOVE THE FOLD
-│                                   │     (Visible sin scroll)
-│      OFERTA BLACK FRIDAY          │     ✅ ICONOS INLINE
-│     [🛍️ COMPRAR AHORA]            │
-│                                   │
-│   ⭐ Producto 1  ⭐ Producto 2   │
-├───────────────────────────────────┤ ◄── El "fold" (límite de pantalla)
-│                                   │
-│   ⭐ Producto 3  ⭐ Producto 4   │ ◄── BELOW THE FOLD
-│                                   │     🌐 SPRITES CDN
-│   📦 Envío     🛡️ Garantía       │
-└───────────────────────────────────┘
-```
+
+**¿Por qué esta separación?**
+
+- **Above-the-fold**: El usuario debe ver estos elementos inmediatamente. Un retraso de 100ms puede reducir las conversiones.
+- **Below-the-fold**: El usuario llegará aquí después de interactuar con la página. Podemos optimizar la carga inicial.
 
 ## 📊 Estrategia de Rendimiento
 
@@ -28,6 +53,20 @@ Sistema escalable de iconos SVG optimizado para rendimiento máximo (Lighthouse 
 | --------------- | -------------- | -------------- | --------------------------------- |
 | **SVG inline**  | ⚡ Instantáneo | ⚡ Instantáneo | ✅ Iconos críticos above-the-fold |
 | **Sprites CDN** | ⏱️ +100-200ms  | ⏱️ +100-200ms  | ✅ Iconos below-the-fold          |
+
+### Análisis de impacto
+
+**SVG Inline (Críticos)**:
+
+- ✅ **Ventajas**: Sin requests HTTP, renderizado inmediato, cacheable con el HTML
+- ⚠️ **Consideraciones**: Aumenta el tamaño del bundle inicial (~2KB por página)
+- 🎯 **Ideal para**: Logo, carrito, menú hamburguesa, CTAs principales
+
+**Sprites CDN (No críticos)**:
+
+- ✅ **Ventajas**: Cache infinito, compresión óptima, no aumenta bundle inicial
+- ⚠️ **Consideraciones**: Requiere request HTTP adicional
+- 🎯 **Ideal para**: Footer, redes sociales, features, iconos decorativos
 
 ## 🏗️ Arquitectura
 
