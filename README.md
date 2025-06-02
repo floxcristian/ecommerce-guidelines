@@ -141,40 +141,116 @@ Esta guía cubre desde la optimización frontend hasta la infraestructura comple
 
 ### Microservicios Recomendados
 
-```
-┌─────────────┐    ┌─────────────┐    ┌─────────────┐
-│   Frontend  │    │    Admin    │    │   Mobile    │
-│  (Angular)  │    │  (Angular)  │    │(Ionic/RN)   │
-└──────┬──────┘    └──────┬──────┘    └──────┬──────┘
-       │                  │                  │
-       └──────────────────┼──────────────────┘
-                          │
-                ┌─────────▼─────────┐
-                │   API Gateway     │
-                │   (NestJS)        │
-                └─────────┬─────────┘
-                          │
-        ┌─────────────────┼─────────────────┐
-        │                 │                 │
-  ┌─────▼─────┐    ┌─────▼─────┐    ┌─────▼─────┐
-  │Auth Service│    │Product    │    │Order      │
-  │(JWT+RBAC)  │    │Service    │    │Service    │
-  └───────────┘    └───────────┘    └───────────┘
-        │                 │                 │
-  ┌─────▼─────┐    ┌─────▼─────┐    ┌─────▼─────┐
-  │PostgreSQL │    │PostgreSQL │    │PostgreSQL │
-  │(Users)    │    │(Products) │    │(Orders)   │
-  └───────────┘    └───────────┘    └───────────┘
+```mermaid
+graph TB
+    subgraph "Cliente Layer"
+        FE[Frontend<br/>Angular]
+        ADMIN[Admin Panel<br/>Angular]
+        MOBILE[Mobile App<br/>Ionic/RN]
+    end
+
+    subgraph "API Gateway Layer"
+        GW[API Gateway<br/>NestJS + Traefik]
+    end
+
+    subgraph "Microservices Layer"
+        AUTH[Auth Service<br/>JWT + RBAC]
+        PRODUCT[Product Service<br/>Catalog + Inventory]
+        ORDER[Order Service<br/>Cart + Orders]
+        PAYMENT[Payment Service<br/>Stripe + PayPal]
+        NOTIFY[Notification Service<br/>Email + Push]
+    end
+
+    subgraph "Database Layer"
+        AUTHDB[(PostgreSQL<br/>Users)]
+        PRODUCTDB[(PostgreSQL<br/>Products)]
+        ORDERDB[(PostgreSQL<br/>Orders)]
+        PAYMENTDB[(PostgreSQL<br/>Payments)]
+        NOTIFYDB[(PostgreSQL<br/>Templates)]
+    end
+
+    subgraph "Infrastructure Layer"
+        REDIS[(Redis<br/>Cache + Sessions)]
+        QUEUE[BullMQ<br/>Background Jobs]
+        METRICS[Prometheus<br/>Metrics]
+        LOGS[Loki<br/>Logs]
+    end
+
+    FE --> GW
+    ADMIN --> GW
+    MOBILE --> GW
+
+    GW --> AUTH
+    GW --> PRODUCT
+    GW --> ORDER
+    GW --> PAYMENT
+    GW --> NOTIFY
+
+    AUTH --> AUTHDB
+    PRODUCT --> PRODUCTDB
+    ORDER --> ORDERDB
+    PAYMENT --> PAYMENTDB
+    NOTIFY --> NOTIFYDB
+
+    AUTH -.-> REDIS
+    PRODUCT -.-> REDIS
+    ORDER -.-> QUEUE
+    PAYMENT -.-> QUEUE
+    NOTIFY -.-> QUEUE
+
+    AUTH -.-> METRICS
+    PRODUCT -.-> METRICS
+    ORDER -.-> METRICS
+    PAYMENT -.-> METRICS
+    NOTIFY -.-> METRICS
+
+    classDef frontend fill:#e1f5fe
+    classDef gateway fill:#f3e5f5
+    classDef service fill:#e8f5e8
+    classDef database fill:#fff3e0
+    classDef infra fill:#fce4ec
+
+    class FE,ADMIN,MOBILE frontend
+    class GW gateway
+    class AUTH,PRODUCT,ORDER,PAYMENT,NOTIFY service
+    class AUTHDB,PRODUCTDB,ORDERDB,PAYMENTDB,NOTIFYDB database
+    class REDIS,QUEUE,METRICS,LOGS infra
 ```
 
 ### Flujo de Datos
 
-1. **Cliente** → **CDN/WAF** → **Load Balancer**
-2. **Load Balancer** → **API Gateway**
-3. **API Gateway** → **Microservicios específicos**
-4. **Microservicios** → **Bases de datos independientes**
-5. **Eventos** → **Message Queue (Redis/BullMQ)**
-6. **Métricas** → **Prometheus** → **Grafana**
+```mermaid
+sequenceDiagram
+    participant C as Cliente
+    participant CDN as Cloudflare CDN
+    participant LB as Load Balancer
+    participant GW as API Gateway
+    participant AUTH as Auth Service
+    participant PROD as Product Service
+    participant ORDER as Order Service
+    participant DB as Database
+    participant QUEUE as Message Queue
+    participant METRICS as Prometheus
+
+    C->>CDN: Request
+    CDN->>LB: Forward Request
+    LB->>GW: Route to Gateway
+    GW->>AUTH: Validate JWT
+    AUTH-->>GW: Token Valid
+    GW->>PROD: Get Products
+    PROD->>DB: Query Products
+    DB-->>PROD: Return Data
+    PROD-->>GW: Product List
+    GW-->>C: JSON Response
+
+    Note over ORDER,QUEUE: Async Events
+    ORDER->>QUEUE: Order Created Event
+    QUEUE->>METRICS: Update Metrics
+
+    Note over GW,METRICS: Observability
+    GW->>METRICS: Request Metrics
+    PROD->>METRICS: Service Metrics
+```
 
 ## 📋 Subdominios y Arquitectura
 
