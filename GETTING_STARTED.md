@@ -18,33 +18,33 @@ Implementar un **ecommerce enterprise-ready** con:
 
 ```
 1. 📁 Revisa la [Estructura del Proyecto](./PROJECT_STRUCTURE.md) (10 min)
-2. 🎨 Lee [Frontend Optimization](./frontend-optimization.md) (30 min)
-3. ⚙️ Estudia [Backend Microservices](./backend-microservices.md) (45 min)
-4. 🏗️ Aprende [Infrastructure](./infrastructure-deployment.md) (40 min)
+2. 🎨 Lee [Frontend Angular](./docs/frontend/angular-optimization.md) (30 min)
+3. ⚙️ Estudia [Backend Microservices](./docs/backend/microservices-architecture.md) (45 min)
+4. 🏗️ Aprende [Infrastructure](./docs/infrastructure/docker-development.md) (40 min)
 ```
 
 ### 👨‍💻 **Soy desarrollador frontend**
 
 ```
-1. 🎨 Comienza con [Frontend Optimization](./frontend-optimization.md)
-2. ⚙️ Familiarízate con [Backend Microservices](./backend-microservices.md)
-3. 🏗️ Revisa [Infrastructure](./infrastructure-deployment.md) para deployment
+1. 🎨 Comienza con [Frontend Angular](./docs/frontend/angular-optimization.md)
+2. ⚙️ Familiarízate con [Backend Microservices](./docs/backend/microservices-architecture.md)
+3. 🏗️ Revisa [Infrastructure](./docs/infrastructure/docker-development.md) para deployment
 ```
 
 ### 🔧 **Soy desarrollador backend**
 
 ```
-1. ⚙️ Comienza con [Backend Microservices](./backend-microservices.md)
-2. 🏗️ Continúa con [Infrastructure](./infrastructure-deployment.md)
-3. 🎨 Revisa [Frontend Optimization](./frontend-optimization.md) para integraciones
+1. ⚙️ Comienza con [Backend Microservices](./docs/backend/microservices-architecture.md)
+2. 🏗️ Continúa con [Infrastructure](./docs/infrastructure/docker-development.md)
+3. 🎨 Revisa [Frontend Angular](./docs/frontend/angular-optimization.md) para integraciones
 ```
 
 ### 🚀 **Soy DevOps/SRE**
 
 ```
-1. 🏗️ Comienza con [Infrastructure](./infrastructure-deployment.md)
-2. ⚙️ Revisa [Backend Microservices](./backend-microservices.md) para arquitectura
-3. 🎨 Consulta [Frontend Optimization](./frontend-optimization.md) para build process
+1. 🏗️ Comienza con [Infrastructure](./docs/infrastructure/docker-development.md)
+2. ⚙️ Revisa [Backend Microservices](./docs/backend/microservices-architecture.md) para arquitectura
+3. 🎨 Consulta [Frontend Angular](./docs/frontend/angular-optimization.md) para build process
 ```
 
 ### 🏛️ **Soy Tech Lead/Architect**
@@ -59,32 +59,61 @@ Implementar un **ecommerce enterprise-ready** con:
 
 ### Para entender la arquitectura:
 
-```bash
-# 1. Ve directamente a ver el diagrama completo
-cat PROJECT_STRUCTURE.md | grep -A 20 "mermaid"
+```
+1. 📖 Lee el área que te interesa:
+   - Frontend: docs/frontend/README.md
+   - Backend: docs/backend/README.md
+   - Infrastructure: docs/infrastructure/README.md
+   - Architecture: docs/architecture/README.md
 
-# 2. Revisa el stack tecnológico
-head -30 README.md
+2. 🎯 Revisa los patrones específicos para tu stack
+
+3. 📋 Usa los checklists de implementación
 ```
 
-### Para implementar localmente:
+### Para implementar en tu proyecto:
 
 ```bash
-# 1. Clona el concepto (cuando esté disponible)
-git clone <repo-url>
-cd ecommerce-platform
+# 1. Crear tu proyecto base
+mkdir mi-ecommerce && cd mi-ecommerce
+npm init -y
 
-# 2. Sigue la guía de infraestructura
-cat infrastructure-deployment.md
+# 2. Copiar configuraciones de esta guía
+# - Docker configs desde examples/basic-setup/
+# - Templates desde templates/service-template/
+# - CI/CD desde examples/production-configs/
 
-# 3. Levanta el entorno de desarrollo
-docker-compose up -d
+# 3. Personalizar para tu caso
+# - Cambiar nombres de servicios
+# - Configurar variables de entorno
+# - Adaptar URLs y dominios
 
-# 4. Accede a los servicios
-echo "Frontend: https://dev.floxcristian.cl"
-echo "Admin: https://admin.dev.floxcristian.cl"
-echo "API: https://api.dev.floxcristian.cl"
+# 4. Implementar gradualmente siguiendo las guías
 ```
+
+### Para probar conceptos localmente:
+
+```bash
+# 1. En tu proyecto, crear docker-compose.yml
+# (Copiar desde examples/basic-setup/docker-compose.yml)
+
+# 2. Configurar variables de entorno
+cp .env.example .env
+# Editar .env con tus configuraciones
+
+# 3. Levantar servicios básicos
+docker-compose up -d postgres redis
+
+# 4. Desarrollar siguiendo las guías por área
+```
+
+**🌐 URLs para desarrollo local típico:**
+
+- **Tu frontend**: `http://localhost:4200`
+- **Tu API**: `http://localhost:3000`
+- **Base de datos**: `localhost:5432`
+- **Redis**: `localhost:6379`
+- **Monitoreo**: `http://localhost:3001` (si implementas Grafana)
 
 ## 🎓 Conceptos Clave que Aprenderás
 
@@ -122,12 +151,12 @@ echo "API: https://api.dev.floxcristian.cl"
 
 ### 🔗 **Enlaces Principales**
 
-| Guía                                                | Enfoque                 | Tiempo |
-| --------------------------------------------------- | ----------------------- | ------ |
-| [📁 Project Structure](./PROJECT_STRUCTURE.md)      | Overview y organización | 15 min |
-| [🎨 Frontend](./frontend-optimization.md)           | Angular + Performance   | 30 min |
-| [⚙️ Backend](./backend-microservices.md)            | NestJS + Microservicios | 45 min |
-| [🏗️ Infrastructure](./infrastructure-deployment.md) | Docker + K8s + CI/CD    | 40 min |
+| Guía                                                             | Enfoque                 | Tiempo |
+| ---------------------------------------------------------------- | ----------------------- | ------ |
+| [📁 Project Structure](./PROJECT_STRUCTURE.md)                   | Overview y organización | 15 min |
+| [🎨 Frontend](./docs/frontend/angular-optimization.md)           | Angular + Performance   | 30 min |
+| [⚙️ Backend](./docs/backend/microservices-architecture.md)       | NestJS + Microservicios | 45 min |
+| [🏗️ Infrastructure](./docs/infrastructure/docker-development.md) | Docker + K8s + CI/CD    | 40 min |
 
 ### 🛠️ **Por Caso de Uso**
 
@@ -204,15 +233,15 @@ Una vez que hayas elegido tu ruta de aprendizaje, aquí tienes el plan de implem
 #### 📅 **Semana 1: Fundamentos**
 
 ```
-Día 1-2: 📖 Estudiar arquitectura → backend-microservices.md
-Día 3-4: 🏗️ Configurar infraestructura local → infrastructure-deployment.md
+Día 1-2: 📖 Estudiar arquitectura → docs/backend/microservices-architecture.md
+Día 3-4: 🏗️ Configurar infraestructura local → docs/infrastructure/docker-development.md
 Día 5: 🔧 Integración y pruebas básicas
 ```
 
 #### 📅 **Semana 2: Frontend & UX**
 
 ```
-Día 1-2: 🎨 Optimizar frontend → frontend-optimization.md
+Día 1-2: 🎨 Optimizar frontend → docs/frontend/angular-optimization.md
 Día 3-4: 🔗 Integrar frontend con backend (JWT, NgRx, API calls)
 Día 5: 📱 PWA, SEO y performance testing
 ```
@@ -235,9 +264,9 @@ Semana 4: 🔐 Hardening seguridad, pruebas de carga, go-live
 
 #### 🛠️ **Desarrollo Local**
 
-- [ ] Seguir [infrastructure-deployment.md](./infrastructure-deployment.md) → Docker Compose
-- [ ] Implementar [backend-microservices.md](./backend-microservices.md) → API Gateway + servicios
-- [ ] Desarrollar [frontend-optimization.md](./frontend-optimization.md) → Angular optimizado
+- [ ] Seguir [docker-development.md](./docs/infrastructure/docker-development.md) → Docker Compose
+- [ ] Implementar [microservices-architecture.md](./docs/backend/microservices-architecture.md) → API Gateway + servicios
+- [ ] Desarrollar [angular-optimization.md](./docs/frontend/angular-optimization.md) → Angular optimizado
 - [ ] Probar integración completa end-to-end
 
 #### ☁️ **Producción**
@@ -253,16 +282,16 @@ Semana 4: 🔐 Hardening seguridad, pruebas de carga, go-live
 
 ```bash
 # Setup inicial
-git clone <your-repo>
-cd ecommerce-platform
+mkdir mi-ecommerce-project
+cd mi-ecommerce-project
 
 # Desarrollo local
 cp .env.example .env
 docker-compose up -d
 
 # Verificar servicios
-curl https://api.dev.floxcristian.cl/health
-curl https://dev.floxcristian.cl
+curl http://localhost:3000/health
+curl http://localhost:4200
 
 # Deploy producción
 export IMAGE_TAG=$(git rev-parse HEAD)
