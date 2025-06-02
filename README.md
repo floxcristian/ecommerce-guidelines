@@ -35,53 +35,54 @@ Esta guía cubre desde la optimización frontend hasta la infraestructura comple
 
 #### ⚙️ Backend & Microservicios
 
-- **[🏗️ Arquitectura General](./docs/backend/README.md)** - Overview y patrones principales
-- **[🔧 NestJS Patterns](./docs/backend/nestjs-patterns.md)** - Implementación específica
-- **[🚪 API Gateway](./docs/backend/api-gateway.md)** - Routing y autenticación
-- **[🔐 Authentication](./docs/backend/authentication.md)** - JWT, RBAC y seguridad
-- **[📡 Event-Driven](./docs/backend/event-driven.md)** - BullMQ y comunicación
-- **[🛡️ Resilience](./docs/backend/resilience-patterns.md)** - Circuit breaker y retry
+- **[Arquitectura General](./docs/backend/README.md)** - 📄 Overview y patrones principales
+- **[Microservices Architecture](./docs/backend/microservices-architecture.md)** - 📄 Implementación completa ✅
+- **[NestJS Patterns](./docs/backend/nestjs-patterns.md)** - 📄 Patrones específicos de NestJS
+- **[API Gateway](./docs/backend/api-gateway.md)** - 📄 Routing y autenticación
+- **[Authentication](./docs/backend/authentication.md)** - 📄 JWT, RBAC y seguridad
+- **[Event-Driven](./docs/backend/event-driven.md)** - 📄 BullMQ y comunicación
+- **[Resilience](./docs/backend/resilience-patterns.md)** - 📄 Circuit breaker y retry
 
 #### 🎨 Frontend & Performance
 
-- **[🚀 Angular Overview](./docs/frontend/README.md)** - Arquitectura y setup
-- **[⚡ Optimization](./docs/frontend/angular-optimization.md)** - Performance y Core Web Vitals
-- **[🗄️ State Management](./docs/frontend/state-management.md)** - NgRx patterns avanzados
-- **[📱 PWA & SEO](./docs/frontend/pwa-seo.md)** - Progressive Web App y SEO
-- **[🎨 Design System](./docs/frontend/ui-design-system.md)** - Componentes y tokens
+- **[Angular Overview](./docs/frontend/README.md)** - 📄 Arquitectura y setup
+- **[Angular Optimization](./docs/frontend/angular-optimization.md)** - 📄 Performance y Core Web Vitals ✅
+- **[State Management](./docs/frontend/state-management.md)** - 📄 NgRx patterns avanzados
+- **[PWA & SEO](./docs/frontend/pwa-seo.md)** - 📄 Progressive Web App y SEO
+- **[Design System](./docs/frontend/ui-design-system.md)** - 📄 Componentes y tokens
 
 #### 🏗️ Infrastructure & DevOps
 
-- **[☁️ Infrastructure Overview](./docs/infrastructure/README.md)** - Arquitectura general
-- **[🐳 Docker Development](./docs/infrastructure/docker-development.md)** - Entorno local optimizado
-- **[☸️ Kubernetes Production](./docs/infrastructure/kubernetes-production.md)** - GKE y escalabilidad
-- **[🔄 CI/CD Pipelines](./docs/infrastructure/ci-cd-pipelines.md)** - GitHub Actions avanzado
-- **[📊 Monitoring](./docs/infrastructure/monitoring-observability.md)** - Observabilidad completa
-- **[🛡️ Security](./docs/infrastructure/security-hardening.md)** - Hardening y best practices
+- **[Infrastructure Overview](./docs/infrastructure/README.md)** - 📄 Arquitectura general
+- **[Docker Development](./docs/infrastructure/docker-development.md)** - 📄 Entorno local optimizado ✅
+- **[Kubernetes Production](./docs/infrastructure/kubernetes-production.md)** - 📄 GKE y escalabilidad
+- **[CI/CD Pipelines](./docs/infrastructure/ci-cd-pipelines.md)** - 📄 GitHub Actions avanzado
+- **[Monitoring](./docs/infrastructure/monitoring-observability.md)** - 📄 Observabilidad completa
+- **[Security](./docs/infrastructure/security-hardening.md)** - 📄 Hardening y best practices
 
 #### 🏛️ Architecture & Decisions
 
-- **[📋 Tech Stack](./docs/architecture/tech-stack-decisions.md)** - Por qué elegimos cada tecnología
-- **[📈 Scalability](./docs/architecture/scalability-patterns.md)** - Patrones de escalabilidad
-- **[🔄 Migration](./docs/architecture/migration-strategies.md)** - Migrar sistemas existentes
+- **[Tech Stack](./docs/architecture/tech-stack-decisions.md)** - 📄 Por qué elegimos cada tecnología
+- **[Scalability](./docs/architecture/scalability-patterns.md)** - 📄 Patrones de escalabilidad
+- **[Migration](./docs/architecture/migration-strategies.md)** - 📄 Migrar sistemas existentes
 
 ### 🛠️ Código y Templates
 
 #### 📖 Ejemplos Funcionales
 
-- **[⚡ Basic Setup](./examples/basic-setup/)** - Demo mínimo funcional
-- **[🏗️ Microservices Demo](./examples/microservices-demo/)** - Implementación completa
-- **[🚀 Production Configs](./examples/production-configs/)** - Configuraciones reales
+- **[Basic Setup](./examples/basic-setup/)** - 📖 Demo mínimo funcional
+- **[Microservices Demo](./examples/microservices-demo/)** - 📖 Implementación completa
+- **[Production Configs](./examples/production-configs/)** - 📖 Configuraciones reales
 
 #### 📦 Templates Listos
 
-- **[⚙️ Service Template](./templates/service-template/)** - Microservicio base NestJS
-- **[🎨 Frontend Template](./templates/frontend-template/)** - App Angular optimizada
-- **[🏗️ Infrastructure Template](./templates/infrastructure-template/)** - Setup completo K8s
+- **[Service Template](./templates/service-template/)** - 📦 Microservicio base NestJS
+- **[Frontend Template](./templates/frontend-template/)** - 📦 App Angular optimizada
+- **[Infrastructure Template](./templates/infrastructure-template/)** - 📦 Setup completo K8s
 
 #### 🔧 Herramientas
 
-- **[🛠️ Development Tools](./tools/)** - Scripts y automatización
+- **[Development Tools](./tools/)** - 🔧 Scripts y automatización
 
 ## 🌐 Entornos Soportados
 
@@ -136,6 +137,45 @@ Esta guía cubre desde la optimización frontend hasta la infraestructura comple
 
 > **📝 Nota**: Esta es una **guía de implementación**. Los ejemplos y templates están diseñados para que los copies y adaptes a tu proyecto específico.
 
+## 🏗️ Arquitectura de Referencia
+
+### Microservicios Recomendados
+
+```
+┌─────────────┐    ┌─────────────┐    ┌─────────────┐
+│   Frontend  │    │    Admin    │    │   Mobile    │
+│  (Angular)  │    │  (Angular)  │    │(Ionic/RN)   │
+└──────┬──────┘    └──────┬──────┘    └──────┬──────┘
+       │                  │                  │
+       └──────────────────┼──────────────────┘
+                          │
+                ┌─────────▼─────────┐
+                │   API Gateway     │
+                │   (NestJS)        │
+                └─────────┬─────────┘
+                          │
+        ┌─────────────────┼─────────────────┐
+        │                 │                 │
+  ┌─────▼─────┐    ┌─────▼─────┐    ┌─────▼─────┐
+  │Auth Service│    │Product    │    │Order      │
+  │(JWT+RBAC)  │    │Service    │    │Service    │
+  └───────────┘    └───────────┘    └───────────┘
+        │                 │                 │
+  ┌─────▼─────┐    ┌─────▼─────┐    ┌─────▼─────┐
+  │PostgreSQL │    │PostgreSQL │    │PostgreSQL │
+  │(Users)    │    │(Products) │    │(Orders)   │
+  └───────────┘    └───────────┘    └───────────┘
+```
+
+### Flujo de Datos
+
+1. **Cliente** → **CDN/WAF** → **Load Balancer**
+2. **Load Balancer** → **API Gateway**
+3. **API Gateway** → **Microservicios específicos**
+4. **Microservicios** → **Bases de datos independientes**
+5. **Eventos** → **Message Queue (Redis/BullMQ)**
+6. **Métricas** → **Prometheus** → **Grafana**
+
 ## 📋 Subdominios y Arquitectura
 
 ### Desarrollo
@@ -182,10 +222,10 @@ Esta guía cubre desde la optimización frontend hasta la infraestructura comple
 
 ### ✅ Completado
 
-- [x] **Estructura organizada** ✅ **Completado**
-- [x] **Guías por área especializada**
-- [x] **Documentación navegable**
-- [x] **Contenido técnico completo**
+- [x] Estructura organizada
+- [x] Guías por área especializada
+- [x] Documentación navegable
+- [x] Contenido técnico completo
 
 ### 🚧 En Progreso
 

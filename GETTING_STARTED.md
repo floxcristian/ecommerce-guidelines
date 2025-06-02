@@ -115,6 +115,73 @@ docker-compose up -d postgres redis
 - **Redis**: `localhost:6379`
 - **Monitoreo**: `http://localhost:3001` (si implementas Grafana)
 
+## 📁 Estructura Recomendada para tu Proyecto
+
+Si vas a implementar esta arquitectura, te recomendamos esta estructura de proyecto:
+
+```
+mi-ecommerce-project/
+├── .github/
+│   └── workflows/                     # CI/CD pipelines
+├── apps/
+│   ├── frontend/                      # Angular app principal
+│   ├── admin/                         # Panel administrativo
+│   └── mobile/                        # App móvil (opcional)
+├── libs/
+│   ├── shared/                        # Código compartido
+│   ├── ui-components/                 # Design system
+│   └── api-interfaces/                # Tipos TypeScript
+├── services/
+│   ├── api-gateway/                   # Gateway principal
+│   ├── auth-service/                  # Autenticación
+│   ├── product-service/               # Gestión productos
+│   ├── order-service/                 # Gestión pedidos
+│   ├── payment-service/               # Pagos
+│   └── notification-service/          # Notificaciones
+├── infrastructure/
+│   ├── docker/                        # Configs Docker
+│   ├── kubernetes/                    # Manifests K8s
+│   ├── terraform/                     # Infrastructure as Code
+│   └── monitoring/                    # Prometheus, Grafana configs
+├── tools/
+│   ├── scripts/                       # Scripts de automatización
+│   └── generators/                    # Generadores de código
+├── docker-compose.yml                 # Desarrollo local
+├── docker-compose.prod.yml            # Producción local
+├── nx.json                           # Configuración NX
+├── package.json                      # Dependencies
+└── README.md                         # Tu documentación
+```
+
+### 🚀 Comandos para crear esta estructura:
+
+```bash
+# 1. Crear proyecto base con NX
+npx create-nx-workspace@latest mi-ecommerce-project --preset=empty
+cd mi-ecommerce-project
+
+# 2. Añadir aplicaciones
+nx g @nrwl/angular:app frontend
+nx g @nrwl/angular:app admin
+nx g @nrwl/nest:app api-gateway
+nx g @nrwl/nest:app auth-service
+nx g @nrwl/nest:app product-service
+
+# 3. Añadir librerías compartidas
+nx g @nrwl/workspace:lib shared
+nx g @nrwl/angular:lib ui-components
+nx g @nrwl/workspace:lib api-interfaces
+
+# 4. Crear estructura de infraestructura
+mkdir -p infrastructure/{docker,kubernetes,terraform,monitoring}
+mkdir -p tools/{scripts,generators}
+
+# 5. Copiar configuraciones desde esta guía
+# - Docker configs desde examples/basic-setup/
+# - K8s manifests desde examples/production-configs/
+# - CI/CD desde examples/production-configs/.github/
+```
+
 ## 🎓 Conceptos Clave que Aprenderás
 
 ### 🏗️ **Arquitectura**
@@ -151,12 +218,12 @@ docker-compose up -d postgres redis
 
 ### 🔗 **Enlaces Principales**
 
-| Guía                                                             | Enfoque                 | Tiempo |
-| ---------------------------------------------------------------- | ----------------------- | ------ |
-| [📁 Project Structure](./PROJECT_STRUCTURE.md)                   | Overview y organización | 15 min |
-| [🎨 Frontend](./docs/frontend/angular-optimization.md)           | Angular + Performance   | 30 min |
-| [⚙️ Backend](./docs/backend/microservices-architecture.md)       | NestJS + Microservicios | 45 min |
-| [🏗️ Infrastructure](./docs/infrastructure/docker-development.md) | Docker + K8s + CI/CD    | 40 min |
+| Guía                                                          | Enfoque                    | Tiempo |
+| ------------------------------------------------------------- | -------------------------- | ------ |
+| [Project Structure](./PROJECT_STRUCTURE.md)                   | 📁 Overview y organización | 15 min |
+| [Frontend](./docs/frontend/angular-optimization.md)           | 📄 Angular + Performance   | 30 min |
+| [Backend](./docs/backend/microservices-architecture.md)       | 📄 NestJS + Microservicios | 45 min |
+| [Infrastructure](./docs/infrastructure/docker-development.md) | 📄 Docker + K8s + CI/CD    | 40 min |
 
 ### 🛠️ **Por Caso de Uso**
 
