@@ -1,6 +1,6 @@
-# 📊 Monitoreo y Analytics de Performance
+# 📊 Performance Monitoring - Monitoreo Avanzado Frontend
 
-Guía completa para implementar monitoreo de rendimiento en aplicaciones e-commerce Angular con métricas RUM, alertas automáticas y dashboards de performance.
+Guía completa para implementar monitoreo de rendimiento en aplicaciones ecommerce Angular con métricas RUM, alertas automáticas y dashboards de performance.
 
 ## 🎯 Objetivos del Monitoreo
 
@@ -12,35 +12,88 @@ Guía completa para implementar monitoreo de rendimiento en aplicaciones e-comme
 
 ## 📈 Arquitectura de Monitoreo
 
+El siguiente diagrama muestra cómo se integra el sistema de monitoreo de performance en una aplicación Angular ecommerce, desde la captura de métricas hasta las alertas automáticas.
+
 ```mermaid
 graph TB
-    A[Angular App] --> B[Web Vitals API]
-    A --> C[Performance Observer]
-    A --> D[Business Events]
+    A[Angular App<br/>Frontend] --> B[Web Vitals API<br/>Performance Observer]
+    A --> C[Performance Observer<br/>Custom Metrics]
+    A --> D[Business Events<br/>Ecommerce Analytics]
 
-    B --> E[Analytics Service]
+    B --> E[Analytics Service<br/>Aggregation Layer]
     C --> E
     D --> E
 
-    E --> F[Google Analytics 4]
-    E --> G[DataDog RUM]
-    E --> H[Custom API]
+    E --> F[Google Analytics 4<br/>Enhanced Ecommerce]
+    E --> G[DataDog RUM<br/>Real User Monitoring]
+    E --> H[Custom API<br/>Internal Analytics]
 
-    F --> I[Performance Dashboard]
-    G --> J[Alerting System]
-    H --> K[Business Intelligence]
+    F --> I[Performance Dashboard<br/>Real-time Metrics]
+    G --> J[Alerting System<br/>Automated Notifications]
+    H --> K[Business Intelligence<br/>Decision Making]
 
-    I --> L[Stakeholder Reports]
-    J --> M[DevOps Notifications]
-    K --> N[Product Decisions]
+    I --> L[Stakeholder Reports<br/>Executive Dashboard]
+    J --> M[DevOps Notifications<br/>Slack/Email/PagerDuty]
+    K --> N[Product Decisions<br/>Performance Budget]
+
+    classDef frontend fill:#e1f5fe
+    classDef analytics fill:#f3e5f5
+    classDef external fill:#e8f5e8
+    classDef reporting fill:#fff3e0
+    classDef actions fill:#fce4ec
+
+    class A,B,C,D frontend
+    class E analytics
+    class F,G,H external
+    class I,K reporting
+    class J,L,M,N actions
 ```
+
+#### 📋 Descripción del Flujo de Monitoreo
+
+**🎨 Frontend Data Collection (Azul)**
+
+1. **Angular App**: Aplicación principal que genera métricas de performance
+2. **Web Vitals API**: Captura automática de Core Web Vitals (LCP, FCP, CLS, FID)
+3. **Performance Observer**: Monitoreo personalizado de recursos, navegación y componentes
+4. **Business Events**: Tracking de eventos específicos del ecommerce (add to cart, purchase)
+
+**⚙️ Analytics Processing (Púrpura)**
+
+5. **Analytics Service**: Capa de agregación que procesa, filtra y enruta las métricas
+
+**🌐 External Services (Verde)**
+
+6. **Google Analytics 4**: Enhanced ecommerce tracking con métricas de performance
+7. **DataDog RUM**: Real User Monitoring con dashboards avanzados
+8. **Custom API**: API interna para métricas específicas del negocio
+
+**📊 Reporting Layer (Amarillo)**
+
+9. **Performance Dashboard**: Dashboard en tiempo real dentro de la aplicación
+10. **Business Intelligence**: Análisis de impacto en métricas de negocio
+
+**🚨 Action Layer (Rosa)**
+
+11. **Alerting System**: Sistema automatizado de alertas basado en thresholds
+12. **Stakeholder Reports**: Reportes ejecutivos y de producto
+13. **DevOps Notifications**: Notificaciones inmediatas para el equipo técnico
+14. **Product Decisions**: Información para toma de decisiones de producto
+
+#### ⏱️ Flujo de Datos en Tiempo Real
+
+- **Captura**: 10-50ms después del evento
+- **Procesamiento**: Agregación cada 5 segundos
+- **Alertas**: 1-2 segundos para alertas críticas
+- **Dashboards**: Actualización cada 30 segundos
+- **Reportes**: Generación diaria/semanal automática
 
 ## 🔧 Implementación Core
 
 ### 1. Servicio Base de Analytics
 
 ```typescript
-// libs/analytics/src/lib/performance-analytics.service.ts
+// libs/frontend/analytics/src/lib/performance-analytics.service.ts
 import { Injectable, Inject, PLATFORM_ID } from "@angular/core";
 import { isPlatformBrowser } from "@angular/common";
 import {
@@ -715,7 +768,7 @@ export class PerformanceAnalyticsService {
 ### 2. Integración con Google Analytics 4
 
 ```typescript
-// libs/analytics/src/lib/ga4-integration.service.ts
+// libs/frontend/analytics/src/lib/ga4-integration.service.ts
 import { Injectable } from "@angular/core";
 import { PerformanceAnalyticsService } from "./performance-analytics.service";
 
@@ -887,7 +940,7 @@ export class GA4IntegrationService {
 ### 3. Dashboard de Performance en Tiempo Real
 
 ```typescript
-// libs/analytics/src/lib/performance-dashboard.component.ts
+// libs/frontend/analytics/src/lib/performance-dashboard.component.ts
 import {
   Component,
   OnInit,
@@ -947,7 +1000,7 @@ interface DashboardData {
         </div>
       </div>
 
-      <!-- Core Web Vitals -->
+      <!-- Core Web Vitals Grid -->
       <div class="metrics-grid">
         <div class="metric-card" *ngFor="let metric of coreWebVitals">
           <div class="metric-header">
@@ -1529,10 +1582,10 @@ export class PerformanceDashboardComponent implements OnInit, OnDestroy {
 }
 ```
 
-### 4. Alertas Automáticas
+### 4. Sistema de Alertas Automáticas
 
 ```typescript
-// libs/analytics/src/lib/performance-alerts.service.ts
+// libs/frontend/analytics/src/lib/performance-alerts.service.ts
 import { Injectable } from "@angular/core";
 import { PerformanceAnalyticsService } from "./performance-analytics.service";
 import { filter, debounceTime, distinctUntilChanged } from "rxjs/operators";
@@ -1639,6 +1692,7 @@ export class PerformanceAlertsService {
     switch (rule.severity) {
       case "critical":
         this.sendCriticalAlert(alert);
+        this.sendSlackAlert(alert, "#critical-performance");
         break;
       case "high":
         this.sendHighPriorityAlert(alert);
@@ -1876,19 +1930,819 @@ export class PerformanceAlertsService {
 }
 ```
 
-## 🎯 Checklist de Implementación
+## 🎯 Integración con Business Metrics
 
-- [ ] **Servicio base de analytics configurado**
-- [ ] **Web Vitals tracking activo**
-- [ ] **Google Analytics 4 integrado**
-- [ ] **Dashboard de performance implementado**
-- [ ] **Sistema de alertas configurado**
-- [ ] **Monitoreo de iconos específico**
-- [ ] **Métricas de negocio (e-commerce) tracked**
-- [ ] **Alertas automáticas funcionando**
-- [ ] **Reportes exportables**
-- [ ] **Integration con herramientas externas (Slack, email)**
+### Tracking de Conversión
+
+```typescript
+// Ejemplo de integración con métricas de negocio
+export class EcommerceTrackingService {
+  constructor(private analytics: PerformanceAnalyticsService) {}
+
+  trackConversionFunnel(step: string, metadata?: any) {
+    this.analytics.trackBusinessEvent({
+      event: `conversion_${step}`,
+      category: "ecommerce",
+      metadata: {
+        ...metadata,
+        performanceScore: this.getLatestPerformanceScore(),
+      },
+      timestamp: Date.now(),
+      sessionId: this.analytics["sessionId"],
+    });
+  }
+
+  private getLatestPerformanceScore(): number {
+    // Correlate performance with conversion
+    // ...implementation...
+  }
+}
+```
+
+## 📊 Performance Budget
+
+### Definición de Presupuestos
+
+```typescript
+// Performance budgets específicos para ecommerce
+export const PERFORMANCE_BUDGETS = {
+  // Page-specific budgets
+  homepage: {
+    LCP: 2000,
+    FCP: 1500,
+    CLS: 0.05,
+    FID: 50,
+  },
+  productPage: {
+    LCP: 2500,
+    FCP: 1800,
+    CLS: 0.1,
+    FID: 100,
+  },
+  checkout: {
+    LCP: 2000,
+    FCP: 1500,
+    CLS: 0.01, // Very strict for checkout
+    FID: 50,
+  },
+};
+```
+
+## 🔗 Integración con CI/CD
+
+### GitHub Actions para Performance
+
+```yaml
+# .github/workflows/performance-monitoring.yml
+name: Performance Monitoring
+
+on:
+  deployment_status:
+    types: [success]
+
+jobs:
+  performance-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Performance Audit
+        uses: treosh/lighthouse-ci-action@v9
+        with:
+          configPath: "./lighthouserc.json"
+          uploadArtifacts: true
+
+      - name: Send Performance Report
+        run: |
+          curl -X POST ${{ secrets.SLACK_WEBHOOK }} \
+            -H 'Content-Type: application/json' \
+            -d '{"text":"Performance audit completed for deployment"}'
+```
+
+## 🚀 Lighthouse CI Integration
+
+### Configuración Lighthouse CI
+
+```javascript
+// lighthouserc.json
+{
+  "ci": {
+    "collect": {
+      "numberOfRuns": 3,
+      "startServerCommand": "npm run serve:ssr",
+      "url": [
+        "http://localhost:4000",
+        "http://localhost:4000/productos",
+        "http://localhost:4000/producto/ejemplo",
+        "http://localhost:4000/carrito",
+        "http://localhost:4000/checkout"
+      ],
+      "settings": {
+        "preset": "desktop",
+        "chromeFlags": "--no-sandbox --disable-dev-shm-usage",
+        "extraHeaders": {
+          "Cookie": "test-mode=true"
+        }
+      }
+    },
+    "assert": {
+      "assertions": {
+        "categories:performance": ["error", {"minScore": 0.9}],
+        "categories:accessibility": ["error", {"minScore": 0.95}],
+        "categories:best-practices": ["error", {"minScore": 0.9}],
+        "categories:seo": ["error", {"minScore": 0.95}],
+        "categories:pwa": ["warn", {"minScore": 0.8}]
+      }
+    },
+    "upload": {
+      "target": "lhci",
+      "serverBaseUrl": "https://lighthouse-server.company.com"
+    }
+  }
+}
+```
+
+### Automatización de Auditorías
+
+```typescript
+// tools/performance-audit.ts
+import { exec } from "child_process";
+import { promisify } from "util";
+
+const execAsync = promisify(exec);
+
+export class PerformanceAuditService {
+  async runLighthouseAudit(url: string, options: any = {}) {
+    const lighthouse = await import("lighthouse");
+    const chromeLauncher = await import("chrome-launcher");
+
+    const chrome = await chromeLauncher.launch({
+      chromeFlags: ["--headless", "--no-sandbox"],
+    });
+
+    const auditOptions = {
+      logLevel: "info",
+      output: "json",
+      onlyCategories: [
+        "performance",
+        "accessibility",
+        "best-practices",
+        "seo",
+        "pwa",
+      ],
+      port: chrome.port,
+      ...options,
+    };
+
+    try {
+      const runnerResult = await lighthouse(url, auditOptions);
+      await chrome.kill();
+
+      return this.parseAuditResults(runnerResult.lhr);
+    } catch (error) {
+      await chrome.kill();
+      throw error;
+    }
+  }
+
+  private parseAuditResults(results: any) {
+    return {
+      performance: Math.round(results.categories.performance.score * 100),
+      accessibility: Math.round(results.categories.accessibility.score * 100),
+      bestPractices: Math.round(
+        results.categories["best-practices"].score * 100
+      ),
+      seo: Math.round(results.categories.seo.score * 100),
+      pwa: Math.round(results.categories.pwa.score * 100),
+      metrics: {
+        fcp: results.audits["first-contentful-paint"].numericValue,
+        lcp: results.audits["largest-contentful-paint"].numericValue,
+        cls: results.audits["cumulative-layout-shift"].numericValue,
+        fid: results.audits["max-potential-fid"].numericValue,
+        ttfb: results.audits["server-response-time"].numericValue,
+      },
+      opportunities: this.extractOpportunities(results.audits),
+      diagnostics: this.extractDiagnostics(results.audits),
+    };
+  }
+
+  private extractOpportunities(audits: any) {
+    const opportunities = [];
+
+    // Critical opportunities that save the most bytes/time
+    const criticalAudits = [
+      "unused-css-rules",
+      "unused-javascript",
+      "modern-image-formats",
+      "efficiently-encode-images",
+      "render-blocking-resources",
+      "unminified-css",
+      "unminified-javascript",
+    ];
+
+    criticalAudits.forEach((auditKey) => {
+      const audit = audits[auditKey];
+      if (audit && audit.score < 1 && audit.details) {
+        opportunities.push({
+          title: audit.title,
+          description: audit.description,
+          score: audit.score,
+          numericValue: audit.numericValue,
+          displayValue: audit.displayValue,
+          details: audit.details,
+        });
+      }
+    });
+
+    return opportunities.sort((a, b) => b.numericValue - a.numericValue);
+  }
+
+  private extractDiagnostics(audits: any) {
+    const diagnostics = [];
+
+    const diagnosticAudits = [
+      "main-thread-tasks",
+      "bootup-time",
+      "uses-long-cache-ttl",
+      "total-byte-weight",
+      "dom-size",
+    ];
+
+    diagnosticAudits.forEach((auditKey) => {
+      const audit = audits[auditKey];
+      if (audit && audit.score < 1) {
+        diagnostics.push({
+          title: audit.title,
+          description: audit.description,
+          score: audit.score,
+          numericValue: audit.numericValue,
+          displayValue: audit.displayValue,
+        });
+      }
+    });
+
+    return diagnostics;
+  }
+
+  // Batch audit multiple URLs
+  async auditMultiplePages(urls: string[]) {
+    const results = [];
+
+    for (const url of urls) {
+      try {
+        console.log(`Auditing ${url}...`);
+        const result = await this.runLighthouseAudit(url);
+        results.push({
+          url,
+          timestamp: new Date().toISOString(),
+          ...result,
+        });
+
+        // Wait between audits to avoid overwhelming the server
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+      } catch (error) {
+        console.error(`Failed to audit ${url}:`, error);
+        results.push({
+          url,
+          timestamp: new Date().toISOString(),
+          error: error.message,
+        });
+      }
+    }
+
+    return results;
+  }
+
+  // Generate performance report
+  generateReport(auditResults: any[]) {
+    const report = {
+      summary: this.generateSummary(auditResults),
+      details: auditResults,
+      recommendations: this.generateRecommendations(auditResults),
+      timestamp: new Date().toISOString(),
+    };
+
+    return report;
+  }
+
+  private generateSummary(results: any[]) {
+    const validResults = results.filter((r) => !r.error);
+
+    if (validResults.length === 0) {
+      return { error: "No valid audit results" };
+    }
+
+    const averages = {
+      performance:
+        validResults.reduce((sum, r) => sum + r.performance, 0) /
+        validResults.length,
+      accessibility:
+        validResults.reduce((sum, r) => sum + r.accessibility, 0) /
+        validResults.length,
+      bestPractices:
+        validResults.reduce((sum, r) => sum + r.bestPractices, 0) /
+        validResults.length,
+      seo:
+        validResults.reduce((sum, r) => sum + r.seo, 0) / validResults.length,
+      pwa:
+        validResults.reduce((sum, r) => sum + r.pwa, 0) / validResults.length,
+    };
+
+    const metricsAverages = {
+      fcp:
+        validResults.reduce((sum, r) => sum + r.metrics.fcp, 0) /
+        validResults.length,
+      lcp:
+        validResults.reduce((sum, r) => sum + r.metrics.lcp, 0) /
+        validResults.length,
+      cls:
+        validResults.reduce((sum, r) => sum + r.metrics.cls, 0) /
+        validResults.length,
+      fid:
+        validResults.reduce((sum, r) => sum + r.metrics.fid, 0) /
+        validResults.length,
+      ttfb:
+        validResults.reduce((sum, r) => sum + r.metrics.ttfb, 0) /
+        validResults.length,
+    };
+
+    return {
+      totalPages: results.length,
+      successfulAudits: validResults.length,
+      failedAudits: results.length - validResults.length,
+      averageScores: averages,
+      averageMetrics: metricsAverages,
+      overallScore:
+        Object.values(averages).reduce((sum, score) => sum + score, 0) / 5,
+    };
+  }
+
+  private generateRecommendations(results: any[]) {
+    const allOpportunities = results
+      .filter((r) => !r.error && r.opportunities)
+      .flatMap((r) => r.opportunities);
+
+    // Group similar opportunities
+    const groupedOpportunities = new Map();
+
+    allOpportunities.forEach((opp) => {
+      const key = opp.title;
+      if (!groupedOpportunities.has(key)) {
+        groupedOpportunities.set(key, {
+          title: opp.title,
+          description: opp.description,
+          totalSavings: 0,
+          pageCount: 0,
+          avgScore: 0,
+        });
+      }
+
+      const group = groupedOpportunities.get(key);
+      group.totalSavings += opp.numericValue || 0;
+      group.pageCount += 1;
+      group.avgScore += opp.score;
+    });
+
+    // Convert to array and sort by total savings
+    const recommendations = Array.from(groupedOpportunities.values())
+      .map((group) => ({
+        ...group,
+        avgScore: group.avgScore / group.pageCount,
+        avgSavings: group.totalSavings / group.pageCount,
+      }))
+      .sort((a, b) => b.totalSavings - a.totalSavings)
+      .slice(0, 10); // Top 10 recommendations
+
+    return recommendations;
+  }
+}
+
+// CLI Usage
+export async function runPerformanceAudit() {
+  const auditService = new PerformanceAuditService();
+
+  const urls = [
+    "http://localhost:4200",
+    "http://localhost:4200/productos",
+    "http://localhost:4200/producto/ejemplo",
+    "http://localhost:4200/carrito",
+    "http://localhost:4200/checkout",
+  ];
+
+  console.log("🚀 Starting performance audit...");
+
+  const results = await auditService.auditMultiplePages(urls);
+  const report = auditService.generateReport(results);
+
+  console.log("📊 Audit completed!");
+  console.log("📋 Summary:", report.summary);
+  console.log("💡 Top Recommendations:", report.recommendations);
+
+  // Save report to file
+  const fs = await import("fs");
+  const path = await import("path");
+
+  const reportPath = path.join(
+    process.cwd(),
+    `performance-report-${Date.now()}.json`
+  );
+  fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
+
+  console.log(`📄 Report saved to: ${reportPath}`);
+
+  return report;
+}
+
+// If running directly
+if (require.main === module) {
+  runPerformanceAudit().catch(console.error);
+}
+```
+
+## 🎯 Performance Budget Monitoring
+
+### Budget Configuration
+
+```typescript
+// performance-budget.config.ts
+export const PERFORMANCE_BUDGET = {
+  // Global budgets
+  global: {
+    performance: 90,
+    accessibility: 95,
+    bestPractices: 90,
+    seo: 95,
+    pwa: 80,
+  },
+
+  // Page-specific budgets
+  pages: {
+    homepage: {
+      performance: 95,
+      lcp: 2000,
+      fcp: 1500,
+      cls: 0.05,
+      fid: 50,
+      budgets: [
+        { resourceType: "script", budget: 300 },
+        { resourceType: "image", budget: 800 },
+        { resourceType: "stylesheet", budget: 50 },
+      ],
+    },
+    productPage: {
+      performance: 90,
+      lcp: 2500,
+      fcp: 1800,
+      cls: 0.1,
+      fid: 100,
+      budgets: [
+        { resourceType: "script", budget: 400 },
+        { resourceType: "image", budget: 1200 },
+        { resourceType: "stylesheet", budget: 80 },
+      ],
+    },
+    checkout: {
+      performance: 95,
+      lcp: 2000,
+      fcp: 1500,
+      cls: 0.01, // Very strict for checkout
+      fid: 50,
+      budgets: [
+        { resourceType: "script", budget: 250 },
+        { resourceType: "image", budget: 400 },
+        { resourceType: "stylesheet", budget: 40 },
+      ],
+    },
+  },
+
+  // Alert thresholds
+  alerts: {
+    performance: {
+      warning: 85,
+      critical: 75,
+    },
+    lcp: {
+      warning: 2500,
+      critical: 4000,
+    },
+    fcp: {
+      warning: 1800,
+      critical: 3000,
+    },
+    cls: {
+      warning: 0.1,
+      critical: 0.25,
+    },
+    fid: {
+      warning: 100,
+      critical: 300,
+    },
+  },
+};
+
+export class PerformanceBudgetService {
+  checkBudget(auditResult: any, pageName: string) {
+    const budget =
+      PERFORMANCE_BUDGET.pages[pageName] || PERFORMANCE_BUDGET.global;
+    const violations = [];
+
+    // Check Lighthouse scores
+    if (auditResult.performance < budget.performance) {
+      violations.push({
+        type: "performance_score",
+        expected: budget.performance,
+        actual: auditResult.performance,
+        severity: this.getSeverity("performance", auditResult.performance),
+      });
+    }
+
+    // Check Core Web Vitals
+    if (budget.lcp && auditResult.metrics.lcp > budget.lcp) {
+      violations.push({
+        type: "lcp",
+        expected: budget.lcp,
+        actual: auditResult.metrics.lcp,
+        severity: this.getSeverity("lcp", auditResult.metrics.lcp),
+      });
+    }
+
+    if (budget.fcp && auditResult.metrics.fcp > budget.fcp) {
+      violations.push({
+        type: "fcp",
+        expected: budget.fcp,
+        actual: auditResult.metrics.fcp,
+        severity: this.getSeverity("fcp", auditResult.metrics.fcp),
+      });
+    }
+
+    if (budget.cls && auditResult.metrics.cls > budget.cls) {
+      violations.push({
+        type: "cls",
+        expected: budget.cls,
+        actual: auditResult.metrics.cls,
+        severity: this.getSeverity("cls", auditResult.metrics.cls),
+      });
+    }
+
+    if (budget.fid && auditResult.metrics.fid > budget.fid) {
+      violations.push({
+        type: "fid",
+        expected: budget.fid,
+        actual: auditResult.metrics.fid,
+        severity: this.getSeverity("fid", auditResult.metrics.fid),
+      });
+    }
+
+    return {
+      passed: violations.length === 0,
+      violations,
+      score: this.calculateBudgetScore(violations),
+    };
+  }
+
+  private getSeverity(
+    metric: string,
+    value: number
+  ): "warning" | "critical" | "ok" {
+    const thresholds = PERFORMANCE_BUDGET.alerts[metric];
+    if (!thresholds) return "ok";
+
+    if (metric === "performance") {
+      if (value < thresholds.critical) return "critical";
+      if (value < thresholds.warning) return "warning";
+    } else {
+      if (value > thresholds.critical) return "critical";
+      if (value > thresholds.warning) return "warning";
+    }
+
+    return "ok";
+  }
+
+  private calculateBudgetScore(violations: any[]): number {
+    if (violations.length === 0) return 100;
+
+    const criticalCount = violations.filter(
+      (v) => v.severity === "critical"
+    ).length;
+    const warningCount = violations.filter(
+      (v) => v.severity === "warning"
+    ).length;
+
+    let score = 100;
+    score -= criticalCount * 20; // -20 points per critical violation
+    score -= warningCount * 5; // -5 points per warning violation
+
+    return Math.max(0, score);
+  }
+}
+```
+
+## 📈 Regression Testing
+
+### Automated Performance Testing
+
+```typescript
+// tools/performance-regression.ts
+import { PerformanceAuditService } from "./performance-audit";
+import { PerformanceBudgetService } from "./performance-budget";
+
+export class PerformanceRegressionService {
+  private auditService = new PerformanceAuditService();
+  private budgetService = new PerformanceBudgetService();
+
+  async checkRegression(baselineFile: string, currentUrls: string[]) {
+    console.log("🔍 Running regression analysis...");
+
+    // Load baseline data
+    const baseline = await this.loadBaseline(baselineFile);
+
+    // Run current audits
+    const current = await this.auditService.auditMultiplePages(currentUrls);
+
+    // Compare results
+    const regression = this.compareResults(baseline, current);
+
+    // Generate regression report
+    const report = this.generateRegressionReport(regression);
+
+    return report;
+  }
+
+  private async loadBaseline(filePath: string) {
+    const fs = await import("fs");
+
+    if (!fs.existsSync(filePath)) {
+      throw new Error(`Baseline file not found: ${filePath}`);
+    }
+
+    const content = fs.readFileSync(filePath, "utf8");
+    return JSON.parse(content);
+  }
+
+  private compareResults(baseline: any[], current: any[]) {
+    const comparisons = [];
+
+    current.forEach((currentResult) => {
+      const baselineResult = baseline.find((b) => b.url === currentResult.url);
+
+      if (!baselineResult) {
+        comparisons.push({
+          url: currentResult.url,
+          status: "new",
+          current: currentResult,
+        });
+        return;
+      }
+
+      const comparison = {
+        url: currentResult.url,
+        status: "compared",
+        baseline: baselineResult,
+        current: currentResult,
+        diff: this.calculateDifferences(baselineResult, currentResult),
+      };
+
+      comparisons.push(comparison);
+    });
+
+    return comparisons;
+  }
+
+  private calculateDifferences(baseline: any, current: any) {
+    const diff = {
+      performance: current.performance - baseline.performance,
+      accessibility: current.accessibility - baseline.accessibility,
+      bestPractices: current.bestPractices - baseline.bestPractices,
+      seo: current.seo - baseline.seo,
+      pwa: current.pwa - baseline.pwa,
+      metrics: {
+        fcp: current.metrics.fcp - baseline.metrics.fcp,
+        lcp: current.metrics.lcp - baseline.metrics.lcp,
+        cls: current.metrics.cls - baseline.metrics.cls,
+        fid: current.metrics.fid - baseline.metrics.fid,
+        ttfb: current.metrics.ttfb - baseline.metrics.ttfb,
+      },
+    };
+
+    // Determine if this is a regression
+    diff.isRegression =
+      diff.performance < -5 || // 5 point drop in performance
+      diff.metrics.fcp > 200 || // 200ms increase in FCP
+      diff.metrics.lcp > 500 || // 500ms increase in LCP
+      diff.metrics.cls > 0.05 || // 0.05 increase in CLS
+      diff.metrics.fid > 50; // 50ms increase in FID
+
+    return diff;
+  }
+
+  private generateRegressionReport(comparisons: any[]) {
+    const regressions = comparisons.filter((c) => c.diff?.isRegression);
+    const improvements = comparisons.filter(
+      (c) =>
+        c.diff &&
+        !c.diff.isRegression &&
+        (c.diff.performance > 2 ||
+          c.diff.metrics.fcp < -100 ||
+          c.diff.metrics.lcp < -200)
+    );
+
+    const report = {
+      summary: {
+        total: comparisons.length,
+        regressions: regressions.length,
+        improvements: improvements.length,
+        stable: comparisons.length - regressions.length - improvements.length,
+      },
+      regressions: regressions.map((r) => ({
+        url: r.url,
+        performanceDrop: r.diff.performance,
+        metricChanges: r.diff.metrics,
+        severity: this.calculateRegressionSeverity(r.diff),
+      })),
+      improvements: improvements.map((i) => ({
+        url: i.url,
+        performanceGain: i.diff.performance,
+        metricImprovements: i.diff.metrics,
+      })),
+      recommendations: this.generateRegressionRecommendations(regressions),
+    };
+
+    return report;
+  }
+
+  private calculateRegressionSeverity(
+    diff: any
+  ): "low" | "medium" | "high" | "critical" {
+    if (diff.performance < -15 || diff.metrics.lcp > 1000) return "critical";
+    if (diff.performance < -10 || diff.metrics.lcp > 500) return "high";
+    if (diff.performance < -5 || diff.metrics.lcp > 200) return "medium";
+    return "low";
+  }
+
+  private generateRegressionRecommendations(regressions: any[]) {
+    const recommendations = [];
+
+    regressions.forEach((regression) => {
+      const diff = regression.diff;
+
+      if (diff.metrics.fcp > 200) {
+        recommendations.push({
+          type: "fcp_regression",
+          description: "First Contentful Paint has regressed significantly",
+          action:
+            "Check for new render-blocking resources or increased server response time",
+        });
+      }
+
+      if (diff.metrics.lcp > 500) {
+        recommendations.push({
+          type: "lcp_regression",
+          description: "Largest Contentful Paint has regressed",
+          action: "Review image optimizations and critical resource loading",
+        });
+      }
+
+      if (diff.metrics.cls > 0.05) {
+        recommendations.push({
+          type: "cls_regression",
+          description: "Cumulative Layout Shift has increased",
+          action:
+            "Check for dynamic content insertion or missing size attributes",
+        });
+      }
+    });
+
+    return recommendations;
+  }
+}
+```
+
+## 🎯 Checklist de Implementación Completo
+
+### ✅ **Performance Monitoring Setup**
+
+- [ ] Servicio base de analytics configurado
+- [ ] Web Vitals tracking activo
+- [ ] Google Analytics 4 integrado
+- [ ] Dashboard de performance implementado
+- [ ] Sistema de alertas configurado
+- [ ] Monitoreo de iconos específico
+- [ ] Métricas de negocio (e-commerce) tracked
+
+### ✅ **Lighthouse Integration**
+
+- [ ] Lighthouse CI configurado
+- [ ] Performance budgets definidos
+- [ ] Regression testing automatizado
+- [ ] Reports automáticos en PRs
+- [ ] Integration con Slack/Email
+
+### ✅ **Advanced Monitoring**
+
+- [ ] Real User Monitoring (RUM) activo
+- [ ] Performance budget monitoring
+- [ ] Automated regression detection
+- [ ] Cross-browser performance tracking
+- [ ] Mobile vs Desktop performance comparison
 
 ---
 
-**Siguiente**: [Scripts y Automatización](../tools/scripts.md)
+**🎯 Próximo paso**: Implementa el monitoreo gradualmente, empezando por Core Web Vitals y expandiendo a métricas de negocio avanzado.
