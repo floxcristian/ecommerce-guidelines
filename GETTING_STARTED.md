@@ -19,16 +19,18 @@ Implementar un **ecommerce enterprise-ready** con:
 ```
 1. 📁 Revisa la [Estructura del Proyecto](./PROJECT_STRUCTURE.md) (10 min)
 2. 🎨 Lee [Frontend Angular](./docs/frontend/angular-optimization.md) (30 min)
-3. ⚙️ Estudia [Backend Microservices](./docs/backend/microservices-architecture.md) (45 min)
-4. 🏗️ Aprende [Infrastructure](./docs/infrastructure/docker-development.md) (40 min)
+3. 🎨 Aprende [Sistema de Iconos](./docs/frontend/icons/README.md) (25 min)
+4. ⚙️ Estudia [Backend Microservices](./docs/backend/microservices-architecture.md) (45 min)
+5. 🏗️ Aprende [Infrastructure](./docs/infrastructure/docker-development.md) (40 min)
 ```
 
 ### 👨‍💻 **Soy desarrollador frontend**
 
 ```
 1. 🎨 Comienza con [Frontend Angular](./docs/frontend/angular-optimization.md)
-2. ⚙️ Familiarízate con [Backend Microservices](./docs/backend/microservices-architecture.md)
-3. 🏗️ Revisa [Infrastructure](./docs/infrastructure/docker-development.md) para deployment
+2. 🎨 Domina el [Sistema de Iconos](./docs/frontend/icons/README.md)
+3. ⚙️ Familiarízate con [Backend Microservices](./docs/backend/microservices-architecture.md)
+4. 🏗️ Revisa [Infrastructure](./docs/infrastructure/docker-development.md) para deployment
 ```
 
 ### 🔧 **Soy desarrollador backend**
@@ -37,6 +39,7 @@ Implementar un **ecommerce enterprise-ready** con:
 1. ⚙️ Comienza con [Backend Microservices](./docs/backend/microservices-architecture.md)
 2. 🏗️ Continúa con [Infrastructure](./docs/infrastructure/docker-development.md)
 3. 🎨 Revisa [Frontend Angular](./docs/frontend/angular-optimization.md) para integraciones
+4. 🎨 Consulta [Sistema de Iconos](./docs/frontend/icons/README.md) para assets estáticos
 ```
 
 ### 🚀 **Soy DevOps/SRE**
@@ -45,6 +48,7 @@ Implementar un **ecommerce enterprise-ready** con:
 1. 🏗️ Comienza con [Infrastructure](./docs/infrastructure/docker-development.md)
 2. ⚙️ Revisa [Backend Microservices](./docs/backend/microservices-architecture.md) para arquitectura
 3. 🎨 Consulta [Frontend Angular](./docs/frontend/angular-optimization.md) para build process
+4. 🎨 Revisa [CDN Automation](./docs/frontend/icons/cdn-automation.md) para assets
 ```
 
 ### 🏛️ **Soy Tech Lead/Architect**
@@ -222,21 +226,22 @@ mkdir -p tools/{scripts,generators}
 | ------------------------------------------------------------- | -------------------------- | ------ |
 | [Project Structure](./PROJECT_STRUCTURE.md)                   | 📁 Overview y organización | 15 min |
 | [Frontend](./docs/frontend/angular-optimization.md)           | 📄 Angular + Performance   | 30 min |
+| [Icon System](./docs/frontend/icons/README.md)                | 📄 SVG sprites + CDN       | 25 min |
 | [Backend](./docs/backend/microservices-architecture.md)       | 📄 NestJS + Microservicios | 45 min |
 | [Infrastructure](./docs/infrastructure/docker-development.md) | 📄 Docker + K8s + CI/CD    | 40 min |
 
 ### 🛠️ **Por Caso de Uso**
 
-- **💰 Ecommerce B2C**: Guía completa → Frontend → Backend
+- **💰 Ecommerce B2C**: Guía completa → Frontend → Sistema de Iconos → Backend
 - **🏢 Ecommerce B2B**: Backend → Infrastructure → Frontend
 - **🛒 Marketplace**: Backend → Infrastructure → Escalabilidad
-- **📱 Mobile + Web**: Frontend → Backend → PWA
+- **📱 Mobile + Web**: Frontend → Sistema de Iconos → Backend → PWA
 
 ### 🎯 **Por Objetivo**
 
 - **🚀 MVP rápido**: Guía completa + Docker local
 - **📈 Escalabilidad**: Backend + Infrastructure
-- **⚡ Performance**: Frontend + Optimización
+- **⚡ Performance**: Frontend + Icon System + Optimización
 - **🔒 Enterprise**: Toda la guía + Seguridad
 
 ## 🤔 FAQ Rápido
@@ -334,6 +339,7 @@ Semana 4: 🔐 Hardening seguridad, pruebas de carga, go-live
 - [ ] Seguir [docker-development.md](./docs/infrastructure/docker-development.md) → Docker Compose
 - [ ] Implementar [microservices-architecture.md](./docs/backend/microservices-architecture.md) → API Gateway + servicios
 - [ ] Desarrollar [angular-optimization.md](./docs/frontend/angular-optimization.md) → Angular optimizado
+- [ ] Configurar [sistema de iconos](./docs/frontend/icons/README.md) → SVG sprites + CDN
 - [ ] Probar integración completa end-to-end
 
 #### ☁️ **Producción**
@@ -341,6 +347,7 @@ Semana 4: 🔐 Hardening seguridad, pruebas de carga, go-live
 - [ ] Terraform → Crear infraestructura GKE
 - [ ] CI/CD → Pipeline automatizado GitHub Actions
 - [ ] Observabilidad → Prometheus + Grafana + alertas
+- [ ] CDN → Deploy automático de iconos y assets
 - [ ] Seguridad → TLS, WAF, RBAC, network policies
 - [ ] Testing → Carga, security, performance
 - [ ] Documentación → Runbooks operacionales

@@ -47,6 +47,7 @@ Esta guía cubre desde la optimización frontend hasta la infraestructura comple
 
 - **[Angular Overview](./docs/frontend/README.md)** - 📄 Arquitectura y setup
 - **[Angular Optimization](./docs/frontend/angular-optimization.md)** - 📄 Performance y Core Web Vitals ✅
+- **[Icon System](./docs/frontend/icons/README.md)** - 📄 Sistema de iconos SVG escalable ✅
 - **[State Management](./docs/frontend/state-management.md)** - 📄 NgRx patterns avanzados
 - **[PWA & SEO](./docs/frontend/pwa-seo.md)** - 📄 Progressive Web App y SEO
 - **[Design System](./docs/frontend/ui-design-system.md)** - 📄 Componentes y tokens

@@ -18,7 +18,12 @@ ecommerce-guidelines/
 │   │   ├── pwa-seo.md                # 📄 PWA, SEO y meta tags
 │   │   ├── ssr-optimization.md       # 📄 Server-Side Rendering ✅
 │   │   ├── performance-monitoring.md # 📄 Monitoreo frontend avanzado ✅
-│   │   └── ui-design-system.md       # 📄 Componentes y design tokens
+│   │   ├── ui-design-system.md       # 📄 Componentes y design tokens
+│   │   └── icons/                    # 🎨 Sistema de iconos SVG ✅
+│   │       ├── README.md             # 📄 Overview del sistema de iconos
+│   │       ├── critical-icons.md     # 📄 Iconos críticos above-the-fold
+│   │       ├── cdn-automation.md     # 📄 Automatización CDN
+│   │       └── cms-integration.md    # 📄 Integración con CMS
 │   │
 │   ├── backend/                      # ⚙️ Todo lo relacionado con backend
 │   │   ├── README.md                 # 📄 Overview backend
@@ -74,6 +79,9 @@ ecommerce-guidelines/
 | 🎨 **Frontend**       | `angular-optimization.md`       | ✅ Completa | Performance y Core Web Vitals  |
 | 🎨 **Frontend**       | `ssr-optimization.md`           | ✅ Completa | Server-Side Rendering          |
 | 🎨 **Frontend**       | `performance-monitoring.md`     | ✅ Completa | Monitoreo frontend avanzado    |
+| 🎨 **Frontend**       | `icons/README.md`               | ✅ Completa | Sistema de iconos SVG          |
+| 🎨 **Frontend**       | `icons/critical-icons.md`       | ✅ Completa | Iconos críticos above-the-fold |
+| 🎨 **Frontend**       | `icons/cdn-automation.md`       | ✅ Completa | Automatización CDN             |
 | ⚙️ **Backend**        | `microservices-architecture.md` | ✅ Completa | Arquitectura de microservicios |
 | 🏗️ **Infrastructure** | `docker-development.md`         | ✅ Completa | Entorno local con Docker       |
 | 🏗️ **Infrastructure** | `deployment.md`                 | ✅ Completa | Estrategias de deployment      |
@@ -87,6 +95,7 @@ ecommerce-guidelines/
 | --------------------- | -------------------------- | -------------- | --------- |
 | 🎨 **Frontend**       | `state-management.md`      | 🚧 En progreso | Alta      |
 | 🎨 **Frontend**       | `pwa-seo.md`               | 🚧 En progreso | Media     |
+| 🎨 **Frontend**       | `icons/cms-integration.md` | 🚧 En progreso | Media     |
 | ⚙️ **Backend**        | `nestjs-patterns.md`       | 🚧 En progreso | Alta      |
 | 🏗️ **Infrastructure** | `kubernetes-production.md` | 🚧 En progreso | Alta      |
 
@@ -94,13 +103,23 @@ ecommerce-guidelines/
 
 ### 🎨 Frontend Development
 
-| Guía                       | Enfoque                   | Tiempo | Estado |
-| -------------------------- | ------------------------- | ------ | ------ |
-| **Angular Optimization**   | Performance, PWA, SEO     | 30 min | ✅     |
-| **SSR Optimization**       | Server-Side Rendering     | 25 min | ✅     |
-| **Performance Monitoring** | RUM, alertas, dashboards  | 35 min | ✅     |
-| **State Management**       | NgRx patterns avanzados   | 35 min | 🚧     |
-| **UI Design System**       | Componentes reutilizables | 20 min | 📅     |
+| Guía                       | Enfoque                    | Tiempo | Estado |
+| -------------------------- | -------------------------- | ------ | ------ |
+| **Angular Optimization**   | Performance, PWA, SEO      | 30 min | ✅     |
+| **Icon System**            | SVG sprites, CDN, critical | 25 min | ✅     |
+| **SSR Optimization**       | Server-Side Rendering      | 25 min | ✅     |
+| **Performance Monitoring** | RUM, alertas, dashboards   | 35 min | ✅     |
+| **State Management**       | NgRx patterns avanzados    | 35 min | 🚧     |
+| **UI Design System**       | Componentes reutilizables  | 20 min | 📅     |
+
+#### 🎨 **Subsección: Sistema de Iconos**
+
+| Guía                | Enfoque                    | Tiempo | Estado |
+| ------------------- | -------------------------- | ------ | ------ |
+| **Overview Iconos** | Estrategia general SVG     | 15 min | ✅     |
+| **Critical Icons**  | Above-the-fold inline      | 20 min | ✅     |
+| **CDN Automation**  | Deploy automático sprites  | 25 min | ✅     |
+| **CMS Integration** | Iconos dinámicos desde CMS | 15 min | 🚧     |
 
 ### ⚙️ Backend Development
 
@@ -223,6 +242,24 @@ ecommerce-guidelines/
 4. Video tutoriales y casos de estudio
 
 ## 📊 Cambios Recientes
+
+### ✅ **Integración del Sistema de Iconos**
+
+**Reorganización completa desde `/icons/` a `/docs/frontend/icons/`:**
+
+- `icons/README.md` → `docs/frontend/icons/README.md` ✅
+- `icons/critical-icons.md` → `docs/frontend/icons/critical-icons.md` ✅
+- `icons/cdn-automation.md` → `docs/frontend/icons/cdn-automation.md` ✅
+- `icons/dynamic-icons-cms.md` → `docs/frontend/icons/cms-integration.md` 🚧
+- Eliminada carpeta `/icons/` de la raíz ✅
+- Actualizadas todas las referencias ✅
+
+**Beneficios de la integración:**
+
+- 🎯 **Iconos junto a frontend**: Sistema unificado con otras guías de UI/UX
+- 🎨 **Navegación coherente**: Parte natural del flujo de desarrollo frontend
+- 📁 **Estructura lógica**: Iconos son elementos de interfaz, no infraestructura
+- 🔍 **Mejor discoverability**: Los developers frontend encuentran todo en un lugar
 
 ### ✅ **Redistribución de Contenido Performance**
 
