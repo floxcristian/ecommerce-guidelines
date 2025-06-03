@@ -21,6 +21,10 @@ Documentación de decisiones arquitectónicas, patrones de escalabilidad y estra
 
 - **[Scalability Patterns](./scalability-patterns.md)** - Patrones para crecimiento
 
+### 🏗️ **Organización del Código**
+
+- **[NX Structure](./nx-structure.md)** - Arquitectura NX para ecommerce escalable
+
 ## 🧩 Stack Tecnológico Justificado
 
 ### Frontend Stack

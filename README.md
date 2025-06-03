@@ -141,6 +141,8 @@ Esta guía cubre desde la optimización frontend hasta la infraestructura comple
 
 ### Microservicios Recomendados
 
+El siguiente diagrama muestra la arquitectura completa de microservicios que implementaremos. Cada capa tiene responsabilidades específicas y se comunica de manera controlada con las otras capas.
+
 ```mermaid
 graph TB
     subgraph "Cliente Layer"
@@ -217,7 +219,49 @@ graph TB
     class REDIS,QUEUE,METRICS,LOGS infra
 ```
 
+#### 📋 Descripción de Capas
+
+**🎨 Cliente Layer (Azul)**
+
+- **Frontend Angular**: Aplicación principal del ecommerce para usuarios finales
+- **Admin Panel**: Panel administrativo para gestión de productos, pedidos y usuarios
+- **Mobile App**: Aplicación móvil (Ionic o React Native) con la misma funcionalidad
+
+**🚪 API Gateway Layer (Púrpura)**
+
+- **API Gateway**: Punto único de entrada que maneja autenticación, rate limiting, y routing
+- Utiliza NestJS para lógica de negocio y Traefik para load balancing y SSL
+
+**⚙️ Microservices Layer (Verde)**
+
+- **Auth Service**: Gestiona autenticación JWT, autorización RBAC, y sesiones de usuario
+- **Product Service**: Catálogo de productos, inventario, categorías y búsqueda
+- **Order Service**: Carrito de compras, gestión de pedidos, y estado de órdenes
+- **Payment Service**: Procesamiento de pagos con Stripe/PayPal, facturas
+- **Notification Service**: Emails transaccionales, push notifications, SMS
+
+**💾 Database Layer (Amarillo)**
+
+- Cada microservicio tiene su propia base de datos PostgreSQL
+- Aislamiento completo de datos siguiendo el pattern "Database per Service"
+- Comunicación entre servicios solo a través de APIs o eventos
+
+**🔧 Infrastructure Layer (Rosa)**
+
+- **Redis**: Cache distribuido y almacenamiento de sesiones
+- **BullMQ**: Cola de trabajos asíncronos para procesos pesados
+- **Prometheus**: Recolección de métricas de todos los servicios
+- **Loki**: Agregación centralizada de logs
+
+#### 🔗 Tipos de Conexión
+
+- **Líneas sólidas (→)**: Comunicación HTTP/REST directa
+- **Líneas punteadas (-.->)**: Comunicación asíncrona o secundaria
+- Todas las comunicaciones externas pasan por el API Gateway
+
 ### Flujo de Datos
+
+Este diagrama muestra cómo fluye una petición típica a través de todo el sistema, desde el cliente hasta la base de datos, incluyendo aspectos de observabilidad.
 
 ```mermaid
 sequenceDiagram
@@ -251,6 +295,35 @@ sequenceDiagram
     GW->>METRICS: Request Metrics
     PROD->>METRICS: Service Metrics
 ```
+
+#### 📋 Descripción del Flujo
+
+**🌍 Edge Layer**
+
+1. **Cliente** hace petición (web, móvil, admin)
+2. **Cloudflare CDN** cachea contenido estático y protege contra ataques DDoS
+3. **Load Balancer** distribuye tráfico entre múltiples instancias
+
+**🚪 Gateway Processing** 4. **API Gateway** recibe todas las peticiones y actúa como proxy 5. **Auth Service** valida tokens JWT y permisos RBAC 6. Gateway enruta la petición al microservicio correspondiente
+
+**⚙️ Business Logic** 7. **Product Service** procesa lógica de negocio específica 8. **Database** ejecuta queries optimizadas con índices 9. Respuesta viaja de vuelta siguiendo la misma ruta
+
+**🔄 Procesamiento Asíncrono**
+
+- **Order Service** envía eventos a colas para procesamiento posterior
+- **Message Queue (BullMQ)** procesa trabajos pesados sin bloquear APIs
+
+**📊 Observabilidad**
+
+- **Prometheus** recolecta métricas de latencia, errores, y throughput
+- Todos los servicios envían métricas para monitoreo en tiempo real
+
+#### ⏱️ Tiempos Típicos de Respuesta
+
+- **Cache hit en CDN**: 10-50ms
+- **API Gateway + Auth**: 20-100ms
+- **Microservicio + Database**: 50-200ms
+- **End-to-end total**: 100-400ms
 
 ## 📋 Subdominios y Arquitectura
 
